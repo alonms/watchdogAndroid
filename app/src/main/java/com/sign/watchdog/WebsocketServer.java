@@ -44,6 +44,8 @@ public class WebsocketServer extends WebSocketServer
     public void onMessage(WebSocket arg0, String arg1) {
         // TODO Auto-generated method stub
         System.out.println("onMessage!!!!!!!!!! " + arg1);
+        arg0.send("from android");
+        arg0.close();
     }
 
     @Override
