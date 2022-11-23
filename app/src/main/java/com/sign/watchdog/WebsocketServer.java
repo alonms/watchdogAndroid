@@ -15,11 +15,9 @@ import org.java_websocket.server.WebSocketServer;
 
 public class WebsocketServer extends WebSocketServer
 {
-    private Context context;
-    public WebsocketServer(Context context, InetSocketAddress address) {
+    public WebsocketServer(InetSocketAddress address) {
         super(address);
         // TODO Auto-generated constructor stub
-        this.context = context;
     }
 
     @Override

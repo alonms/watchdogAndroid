@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // ws://10.0.2.16:38301
         String ipAddress = "10.0.2.16";
         InetSocketAddress inetSockAddress = new InetSocketAddress(ipAddress, 38301);
-        WebsocketServer wsServer = new WebsocketServer(this, inetSockAddress);
+        WebsocketServer wsServer = new WebsocketServer(inetSockAddress);
         wsServer.setReuseAddr(true);
         wsServer.start();
 
