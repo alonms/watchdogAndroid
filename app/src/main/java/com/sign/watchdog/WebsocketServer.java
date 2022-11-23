@@ -1,5 +1,8 @@
 package com.sign.watchdog;
 
+import android.content.Context;
+import android.widget.Toast;
+
 import java.net.InetSocketAddress;
 
 import org.java_websocket.WebSocket;
@@ -12,10 +15,11 @@ import org.java_websocket.server.WebSocketServer;
 
 public class WebsocketServer extends WebSocketServer
 {
-
-    public WebsocketServer(InetSocketAddress address) {
+    private Context context;
+    public WebsocketServer(Context context, InetSocketAddress address) {
         super(address);
         // TODO Auto-generated constructor stub
+        this.context = context;
     }
 
     @Override
@@ -26,7 +30,7 @@ public class WebsocketServer extends WebSocketServer
     @Override
     public void onClose(WebSocket arg0, int arg1, String arg2, boolean arg3) {
         // TODO Auto-generated method stub
-
+        System.out.println("onClose!!!!!!!!!!");
     }
 
     @Override
@@ -39,7 +43,7 @@ public class WebsocketServer extends WebSocketServer
     @Override
     public void onMessage(WebSocket arg0, String arg1) {
         // TODO Auto-generated method stub
-
+        System.out.println("onMessage!!!!!!!!!! " + arg1);
     }
 
     @Override
