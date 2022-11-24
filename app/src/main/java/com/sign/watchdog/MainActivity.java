@@ -23,13 +23,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mButton.setOnClickListener(this);
         txt = findViewById(R.id.msg);
 
+        /*
         // ws://10.0.2.16:38301
         String ipAddress = "192.168.0.117";
         InetSocketAddress inetSockAddress = new InetSocketAddress(ipAddress, 38301);
         WebsocketServer wsServer = new WebsocketServer(inetSockAddress);
         wsServer.setReuseAddr(true);
         wsServer.start();
-
+        */
     }
 
     @Override
