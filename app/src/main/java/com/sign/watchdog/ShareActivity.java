@@ -17,6 +17,15 @@ public class ShareActivity extends Activity {
         String path = data.getPath();
         String str = data.getQueryParameter("id");
         Toast.makeText(this, "WD: " + host + " " + path + " " + str, Toast.LENGTH_LONG).show();
+
+        if (path.equals("/restartPlayer")) {
+            Intent intent2 = new Intent();
+            intent2.setAction(Intent.ACTION_VIEW);
+            intent2.setData(Uri.parse("https://dev.signage.me/installplayer/"));
+            startActivity(intent2);
+        }
+
+
         finish();
     }
 }

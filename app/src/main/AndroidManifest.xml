@@ -26,7 +26,7 @@
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="myapp" />
+                <data android:scheme="signplayer" />
             </intent-filter>
         </activity>
         <receiver
