@@ -22,9 +22,10 @@ public class BootDeviceReceiver extends BroadcastReceiver {
         String action = intent.getAction();
         if (Intent.ACTION_BOOT_COMPLETED.equals(action))
         {
-            Toast.makeText(context, "BootDeviceReceiver v4", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "BootDeviceReceiver v5", Toast.LENGTH_LONG).show();
             Intent intent2 = new Intent();
             intent2.setAction(Intent.ACTION_VIEW);
+            intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent2.setData(Uri.parse("https://dev.signage.me/installplayer/"));
             context.startActivity(intent2);
 
@@ -35,9 +36,9 @@ public class BootDeviceReceiver extends BroadcastReceiver {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(System.currentTimeMillis());
                 calendar.set(Calendar.HOUR_OF_DAY, 17);
-                calendar.set(Calendar.MINUTE, 4);
+                calendar.set(Calendar.MINUTE, 15);
                 calendar.set(Calendar.SECOND, 0);
-                alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
+                alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 30000, alarmIntent);
             } catch (Exception e) {
                 int a = 3;
             }
