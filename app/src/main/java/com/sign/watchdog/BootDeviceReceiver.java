@@ -21,13 +21,6 @@ public class BootDeviceReceiver extends BroadcastReceiver {
             intent2.setAction(Intent.ACTION_VIEW);
             intent2.setData(Uri.parse("https://dev.signage.me/installplayer/"));
             context.startActivity(intent2);
-
-            /*
-            Intent intent2 = new Intent(context, MainService.class);
-            context.startService(intent2);
-
-             */
-
         }
     }
 }
