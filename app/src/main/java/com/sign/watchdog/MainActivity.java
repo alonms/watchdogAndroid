@@ -22,7 +22,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener  {
     Button mButton;
-    WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +29,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         mButton = findViewById(R.id.button);
         mButton.setOnClickListener(this);
-
-        webView = findViewById(R.id.webView);
-        webView.loadUrl("https://dev.signage.me/installplayer/wd.html");
     }
 
 
