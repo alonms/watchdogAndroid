@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_MUTABLE);
 
         long startTime = System.currentTimeMillis();
-        long intervalTime = 60*1000;
+        long intervalTime = 10*1000;
 
         String message = "Start service use repeat alarm. ";
 

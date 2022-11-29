@@ -19,7 +19,7 @@ public class BootDeviceReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Toast.makeText(context, "v10", Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "v13", Toast.LENGTH_LONG).show();
         String action = intent.getAction();
         if (Intent.ACTION_BOOT_COMPLETED.equals(action))
         {
@@ -42,7 +42,7 @@ public class BootDeviceReceiver extends BroadcastReceiver {
         PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_MUTABLE);
 
         long startTime = System.currentTimeMillis();
-        long intervalTime = 60*1000;
+        long intervalTime = 10*1000;
 
         Toast.makeText(context, "Create Alarm", Toast.LENGTH_LONG).show();
 
