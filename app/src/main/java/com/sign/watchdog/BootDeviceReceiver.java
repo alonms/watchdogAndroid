@@ -23,6 +23,8 @@ public class BootDeviceReceiver extends BroadcastReceiver {
         if (Intent.ACTION_BOOT_COMPLETED.equals(action))
         {
             Toast.makeText(context, "BootDeviceReceiver v5", Toast.LENGTH_LONG).show();
+            startServiceByAlarm(context);
+            /*
             Intent intent2 = new Intent();
             intent2.setAction(Intent.ACTION_VIEW);
             intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -43,6 +45,30 @@ public class BootDeviceReceiver extends BroadcastReceiver {
                 int a = 3;
             }
 
+             */
+
+
         }
     }
+
+    private void startServiceByAlarm(Context context)
+    {
+        // Get alarm manager.
+        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+
+        // Create intent to invoke the background service.
+        Intent intent = new Intent(context, MyService.class);
+        PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_MUTABLE);
+
+        long startTime = System.currentTimeMillis();
+        long intervalTime = 60*1000;
+
+        String message = "Start service use repeat alarm. ";
+
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+
+        // Create repeat alarm.
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, intervalTime, pendingIntent);
+    }
+
 }

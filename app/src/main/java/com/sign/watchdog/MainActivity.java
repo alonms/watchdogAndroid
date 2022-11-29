@@ -42,7 +42,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View var1) {
         Toast.makeText(this, "onClick", Toast.LENGTH_LONG).show();
-
+        startServiceByAlarm(this);
+        /*
         Intent intent2 = new Intent();
         intent2.setAction(Intent.ACTION_VIEW);
         intent2.setData(Uri.parse("https://dev.signage.me/installplayer/"));
@@ -58,5 +59,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         calendar.set(Calendar.MINUTE, 8);
         calendar.set(Calendar.SECOND, 0);
         alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
+
+         */
+    }
+
+    private void startServiceByAlarm(Context context)
+    {
+        // Get alarm manager.
+        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+
+        // Create intent to invoke the background service.
+        Intent intent = new Intent(context, MyService.class);
+        PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_MUTABLE);
+
+        long startTime = System.currentTimeMillis();
+        long intervalTime = 60*1000;
+
+        String message = "Start service use repeat alarm. ";
+
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+
+        // Create repeat alarm.
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, intervalTime, pendingIntent);
     }
 }
