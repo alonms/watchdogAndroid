@@ -19,35 +19,16 @@ public class BootDeviceReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Toast.makeText(context, "v10", Toast.LENGTH_LONG).show();
         String action = intent.getAction();
         if (Intent.ACTION_BOOT_COMPLETED.equals(action))
         {
-            Toast.makeText(context, "BootDeviceReceiver v5", Toast.LENGTH_LONG).show();
-            startServiceByAlarm(context);
-            /*
-            Intent intent2 = new Intent();
-            intent2.setAction(Intent.ACTION_VIEW);
-            intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent2.setData(Uri.parse("https://dev.signage.me/installplayer/"));
-            context.startActivity(intent2);
-
+            Toast.makeText(context, "ACTION_BOOT_COMPLETED", Toast.LENGTH_LONG).show();
             try {
-                alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-                Intent intent3 = new Intent(context, AlarmReceiver.class);
-                alarmIntent = PendingIntent.getBroadcast(context, 0, intent3, PendingIntent.FLAG_IMMUTABLE);
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(System.currentTimeMillis());
-                calendar.set(Calendar.HOUR_OF_DAY, 17);
-                calendar.set(Calendar.MINUTE, 15);
-                calendar.set(Calendar.SECOND, 0);
-                alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 30000, alarmIntent);
+                startServiceByAlarm(context);
             } catch (Exception e) {
-                int a = 3;
+
             }
-
-             */
-
-
         }
     }
 
@@ -63,9 +44,7 @@ public class BootDeviceReceiver extends BroadcastReceiver {
         long startTime = System.currentTimeMillis();
         long intervalTime = 60*1000;
 
-        String message = "Start service use repeat alarm. ";
-
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "Create Alarm", Toast.LENGTH_LONG).show();
 
         // Create repeat alarm.
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, intervalTime, pendingIntent);

@@ -43,24 +43,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View var1) {
         Toast.makeText(this, "onClick", Toast.LENGTH_LONG).show();
         startServiceByAlarm(this);
-        /*
-        Intent intent2 = new Intent();
-        intent2.setAction(Intent.ACTION_VIEW);
-        intent2.setData(Uri.parse("https://dev.signage.me/installplayer/"));
-        this.startActivity(intent2);
-
-
-        alarmMgr = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
-        Intent intent3 = new Intent(this, AlarmReceiver.class);
-        alarmIntent = PendingIntent.getBroadcast(this, 0, intent3, PendingIntent.FLAG_IMMUTABLE);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 17);
-        calendar.set(Calendar.MINUTE, 8);
-        calendar.set(Calendar.SECOND, 0);
-        alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
-
-         */
     }
 
     private void startServiceByAlarm(Context context)

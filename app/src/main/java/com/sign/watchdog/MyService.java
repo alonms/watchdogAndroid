@@ -23,15 +23,16 @@ public class MyService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
-        String message = "RunAfterBootService onStartCommand() method.";
-
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-        Intent intent2 = new Intent();
-        intent2.setAction(Intent.ACTION_VIEW);
-        intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent2.setData(Uri.parse("https://dev.signage.me/installplayer/"));
-        startActivity(intent2);
+        Toast.makeText(getApplicationContext(), "MyService", Toast.LENGTH_LONG).show();
+        try {
+            Intent intent2 = new Intent();
+            intent2.setAction(Intent.ACTION_VIEW);
+            intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent2.setData(Uri.parse("https://dev.signage.me/installplayer/"));
+            getApplicationContext().startActivity(intent2);
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "Fail", Toast.LENGTH_LONG).show();
+        }
 
         return super.onStartCommand(intent, flags, startId);
     }

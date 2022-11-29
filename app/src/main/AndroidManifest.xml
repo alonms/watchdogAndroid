@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!--
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    -->
 
     <application
         android:icon="@mipmap/ic_launcher"
@@ -14,16 +15,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/Theme.Watchdog"
         tools:targetApi="31">
-        <service
-            android:name=".MyService"
-            android:enabled="true"
-            android:exported="true"></service>
-
         <receiver
-            android:name=".AlarmReceiver"
-            android:enabled="true"
-            android:exported="true" />
-
+            android:name=".BootDeviceReceiver"
+            android:exported="true"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -33,27 +33,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ShareActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="signplayer" />
-            </intent-filter>
-        </activity>
-
-        <receiver
-            android:name=".BootDeviceReceiver"
+        <service
+            android:name=".MyService"
             android:enabled="true"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
+        </service>
     </application>
 
 </manifest>
