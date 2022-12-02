@@ -6,67 +6,60 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/msg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="signPlayer Watchdog"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.445"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.115" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="24dp">
+        <TextView
+            android:id="@+id/msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="signPlayer Watchdog"
+            android:textSize="20sp"
+            android:height="80dp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Restart player everyday at:"
+            android:textSize="16sp"/>
 
-    <RadioButton
-        android:id="@+id/radioButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Never"
-        tools:layout_editor_absoluteX="56dp"
-        tools:layout_editor_absoluteY="208dp" />
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="60dp">
+            <RadioButton
+                android:id="@+id/radioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Never" />
+            <RadioButton
+                android:id="@+id/radioButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12:00AM"
+                app:layout_constraintStart_toStartOf="@+id/radioButton" />
+            <RadioButton
+                android:id="@+id/radioButton3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12:00AM, 12:00PM"
+                app:layout_constraintStart_toStartOf="@+id/radioButton2" />
+            <RadioButton
+                android:id="@+id/radioButton4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12:00AM, 8:00AM, 4:00PM"
+                app:layout_constraintStart_toStartOf="@+id/radioButton3" />
+        </RadioGroup>
 
-    <RadioButton
-        android:id="@+id/radioButton2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="12:00AM"
-        app:layout_constraintStart_toStartOf="@+id/radioButton"
-        tools:layout_editor_absoluteY="256dp" />
 
-    <RadioButton
-        android:id="@+id/radioButton3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="12:00AM, 12:00PM"
-        app:layout_constraintStart_toStartOf="@+id/radioButton2"
-        tools:layout_editor_absoluteY="304dp" />
-
-    <RadioButton
-        android:id="@+id/radioButton4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="12:00AM, 8:00AM, 4:00PM"
-        app:layout_constraintStart_toStartOf="@+id/radioButton3"
-        tools:layout_editor_absoluteY="352dp" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Restart player everyday at:"
-        android:textSize="16sp"
-        tools:layout_editor_absoluteX="56dp"
-        tools:layout_editor_absoluteY="167dp" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="* Reboot the Device to activate the Watchdog"
-        tools:layout_editor_absoluteX="56dp"
-        tools:layout_editor_absoluteY="520dp" />
-
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="* Reboot the Device to activate the Watchdog"/>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
