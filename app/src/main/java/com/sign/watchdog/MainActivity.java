@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 public class MainActivity extends AppCompatActivity  {
     @Override
@@ -18,8 +20,35 @@ public class MainActivity extends AppCompatActivity  {
             startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION));
         }
 
-
         SharedPreferences userDetails = getSharedPreferences("userdetails", MODE_PRIVATE);
         int rebootsPerDay = userDetails.getInt("rebootsPerDay", 1);
+        RadioGroup radioGroup = findViewById(R.id.radioGroup);
+        switch (rebootsPerDay) {
+            case 0:
+                radioGroup.check(R.id.radioButton0);
+                break;
+            case 1:
+                radioGroup.check(R.id.radioButton1);
+                break;
+            case 2:
+                radioGroup.check(R.id.radioButton2);
+                break;
+            case 3:
+                radioGroup.check(R.id.radioButton3);
+                break;
+        }
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton radioButton = radioGroup.findViewById(checkedId);
+                int index = radioGroup.indexOfChild(radioButton);
+                SharedPreferences.Editor editor = userDetails.edit();
+                editor.putInt("rebootsPerDay", index);
+                editor.commit();
+            }
+        });
+
+
+
     }
 }

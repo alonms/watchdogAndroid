@@ -27,28 +27,29 @@
             android:textSize="16sp"/>
 
         <RadioGroup
+            android:id="@+id/radioGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="60dp">
             <RadioButton
-                android:id="@+id/radioButton"
+                android:id="@+id/radioButton0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Never" />
             <RadioButton
-                android:id="@+id/radioButton2"
+                android:id="@+id/radioButton1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="12:00AM"
                 app:layout_constraintStart_toStartOf="@+id/radioButton" />
             <RadioButton
-                android:id="@+id/radioButton3"
+                android:id="@+id/radioButton2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="12:00AM, 12:00PM"
                 app:layout_constraintStart_toStartOf="@+id/radioButton2" />
             <RadioButton
-                android:id="@+id/radioButton4"
+                android:id="@+id/radioButton3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="12:00AM, 8:00AM, 4:00PM"
