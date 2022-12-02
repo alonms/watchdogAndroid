@@ -44,7 +44,13 @@ public class BootDeviceReceiver extends BroadcastReceiver {
                 startTime += AlarmManager.INTERVAL_DAY;
             }
             AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-            long intervalTime = AlarmManager.INTERVAL_DAY;
+
+
+
+            //???long intervalTime = AlarmManager.INTERVAL_DAY;
+            long intervalTime = 30000;
+
+
             Toast.makeText(context, "Restart Player every day at 12AM", Toast.LENGTH_LONG).show();
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, intervalTime, pendingIntent);
 
