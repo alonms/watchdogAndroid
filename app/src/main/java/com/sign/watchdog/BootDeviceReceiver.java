@@ -19,11 +19,16 @@ public class BootDeviceReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Toast.makeText(context, "Watchdog 1.0.0", Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "Watchdog 1.0.5", Toast.LENGTH_LONG).show();
+        startServiceByAlarm(context);
+        /*
         String action = intent.getAction();
         if (Intent.ACTION_BOOT_COMPLETED.equals(action)) {
-            startServiceByAlarm(context);
+            Intent intent2 = new Intent(context, MainService.class);
+            context.startService(intent2);
         }
+
+         */
     }
 
     private void startServiceByAlarm(Context context)
