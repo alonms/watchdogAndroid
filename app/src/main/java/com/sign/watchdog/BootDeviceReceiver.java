@@ -38,10 +38,15 @@ public class BootDeviceReceiver extends BroadcastReceiver {
             long rebootsPerDay = userDetails.getInt("rebootsPerDay", 1);
             if (rebootsPerDay>0) {
                 if (rebootsPerDay==4)
-                    rebootsPerDay = 24;
+                    rebootsPerDay = 24 * 12;
                 long intervalTime = AlarmManager.INTERVAL_DAY / rebootsPerDay;
                 long currentTime = System.currentTimeMillis();
-                long startTime = (((long)(currentTime / intervalTime)) + 1) * intervalTime;
+                long startTime = currentTime / intervalTime;
+                startTime += 1L;
+                startTime *= intervalTime;
+                long diff = (startTime - currentTime) / 1000;
+                long interval = intervalTime / 1000;
+                Toast.makeText(context, "Start in: " + diff + " Interval: " + interval, Toast.LENGTH_LONG).show();
                 AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, intervalTime, pendingIntent);
             }
