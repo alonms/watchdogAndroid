@@ -54,6 +54,12 @@
                 android:layout_height="wrap_content"
                 android:text="12:00AM, 8:00AM, 4:00PM"
                 app:layout_constraintStart_toStartOf="@+id/radioButton3" />
+            <RadioButton
+                android:id="@+id/radioButton4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Every hour"
+                app:layout_constraintStart_toStartOf="@+id/radioButton3" />
         </RadioGroup>
 
 

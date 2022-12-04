@@ -43,6 +43,9 @@ public class MainActivity extends AppCompatActivity  {
             case 3:
                 radioGroup.check(R.id.radioButton3);
                 break;
+            case 4:
+                radioGroup.check(R.id.radioButton4);
+                break;
         }
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {

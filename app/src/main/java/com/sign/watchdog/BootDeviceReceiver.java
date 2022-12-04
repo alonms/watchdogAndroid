@@ -37,6 +37,8 @@ public class BootDeviceReceiver extends BroadcastReceiver {
             SharedPreferences userDetails = context.getSharedPreferences("userdetails", Context.MODE_PRIVATE);
             long rebootsPerDay = userDetails.getInt("rebootsPerDay", 1);
             if (rebootsPerDay>0) {
+                if (rebootsPerDay==4)
+                    rebootsPerDay = 24;
                 long intervalTime = AlarmManager.INTERVAL_DAY / rebootsPerDay;
                 long currentTime = System.currentTimeMillis();
                 long startTime = (((long)(currentTime / intervalTime)) + 1) * intervalTime;
