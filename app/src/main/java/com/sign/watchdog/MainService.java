@@ -2,8 +2,10 @@ package com.sign.watchdog;
 
 import android.app.AlarmManager;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Handler;
@@ -18,6 +20,7 @@ public class MainService extends Service {
     private AlarmThread alarmThread;
     long intervalTime = 0;
     long nextTime = 0;
+    IntentFilter intentFilter = null;
 
     public MainService() {
     }
@@ -32,20 +35,30 @@ public class MainService extends Service {
     {
         try {
             Toast.makeText(this, "MainService.onCreate()", Toast.LENGTH_SHORT).show();
-
             mContext = MainService.this;
 
-            SharedPreferences userDetails = getSharedPreferences("userdetails", Context.MODE_PRIVATE);
-            long rebootsPerDay = userDetails.getInt("rebootsPerDay", 1);
-            if (rebootsPerDay > 0) {
-                if (rebootsPerDay == 4)
-                    rebootsPerDay = 24 * 60;
-                intervalTime = AlarmManager.INTERVAL_DAY / rebootsPerDay;
-                alarmThread = new AlarmThread();
-                alarmThread.start();
+/*???
+            if (intentFilter==null) {
+                intentFilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+                intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
+                BroadcastReceiver mReceiver = new ScreenOnReceiver();
+                registerReceiver(mReceiver, intentFilter);
+            }
+*/
+
+            if (alarmThread==null) {
+                SharedPreferences userDetails = getSharedPreferences("userdetails", Context.MODE_PRIVATE);
+                long rebootsPerDay = userDetails.getInt("rebootsPerDay", 1);
+                if (rebootsPerDay > 0) {
+                    if (rebootsPerDay == 4)
+                        rebootsPerDay = 24 * 12;
+                    intervalTime = AlarmManager.INTERVAL_DAY / rebootsPerDay;
+                    alarmThread = new AlarmThread();
+                    alarmThread.start();
+                }
             }
         } catch (Exception e) {
-
+            Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show();
         }
     }
 

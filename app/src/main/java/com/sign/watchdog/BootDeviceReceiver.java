@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.widget.Toast;
@@ -14,11 +15,15 @@ import java.util.Calendar;
 public class BootDeviceReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Toast.makeText(context, "Watchdog 1.0.11", Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "Watchdog 1.0.21", Toast.LENGTH_LONG).show();
+
         String action = intent.getAction();
         if (Intent.ACTION_BOOT_COMPLETED.equals(action)) {
-            startAlarm(context);
-            // startMainService(context);
+            Toast.makeText(context, "ACTION_BOOT_COMPLETED", Toast.LENGTH_LONG).show();
+            //startAlarm(context);
+            startMainService(context);
+        } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+            Toast.makeText(context, "ACTION_SCREEN_ON", Toast.LENGTH_LONG).show();
         }
     }
 
