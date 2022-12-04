@@ -14,7 +14,7 @@ import java.util.Calendar;
 public class BootDeviceReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Toast.makeText(context, "Watchdog 1.0.8", Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "Watchdog 1.0.11", Toast.LENGTH_LONG).show();
         String action = intent.getAction();
         if (Intent.ACTION_BOOT_COMPLETED.equals(action)) {
             startAlarm(context);
