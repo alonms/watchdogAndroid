@@ -57,12 +57,6 @@ public class MainActivity extends AppCompatActivity  {
                 editor.commit();
             }
         });
-
-        //test();
     }
 
-    void test() {
-        Intent intent = new Intent(this, MainService.class);
-        startService(intent);
-    }
 }
