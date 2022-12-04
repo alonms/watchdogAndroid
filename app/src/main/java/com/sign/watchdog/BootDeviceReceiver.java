@@ -35,7 +35,7 @@ public class BootDeviceReceiver extends BroadcastReceiver {
             intent2.setData(Uri.parse("https://dev.signage.me/installplayer/"));
             PendingIntent pendingIntent = (PendingIntent.getActivity(context, 0, intent2, PendingIntent.FLAG_IMMUTABLE));
             SharedPreferences userDetails = context.getSharedPreferences("userdetails", Context.MODE_PRIVATE);
-            int rebootsPerDay = userDetails.getInt("rebootsPerDay", 1);
+            long rebootsPerDay = userDetails.getInt("rebootsPerDay", 1);
             if (rebootsPerDay>0) {
                 long intervalTime = AlarmManager.INTERVAL_DAY / rebootsPerDay;
                 long currentTime = System.currentTimeMillis();
