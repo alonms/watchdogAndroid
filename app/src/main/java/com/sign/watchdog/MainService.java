@@ -37,15 +37,6 @@ public class MainService extends Service {
             Toast.makeText(this, "MainService.onCreate()", Toast.LENGTH_SHORT).show();
             mContext = MainService.this;
 
-/*???
-            if (intentFilter==null) {
-                intentFilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
-                intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
-                BroadcastReceiver mReceiver = new ScreenOnReceiver();
-                registerReceiver(mReceiver, intentFilter);
-            }
-*/
-
             if (alarmThread==null) {
                 SharedPreferences userDetails = getSharedPreferences("userdetails", Context.MODE_PRIVATE);
                 long rebootsPerDay = userDetails.getInt("rebootsPerDay", 1);
@@ -67,18 +58,6 @@ public class MainService extends Service {
         Toast.makeText(this, "MainService.onStartCommand()", Toast.LENGTH_SHORT).show();
         return START_STICKY;
     }
-
-    /*
-    @Override
-    public void onDestroy()
-    {
-        super.onDestroy();
-        sendBroadcast(new Intent("YouWillNeverKillMe"));
-        Toast.makeText(this, "YouWillNeverKillMe TOAST!!", Toast.LENGTH_LONG).show();
-    }
-
-     */
-
 
     public Handler mMessageHandler = new Handler() {
         @Override

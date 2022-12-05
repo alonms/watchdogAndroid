@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.widget.Toast;
 
 import java.util.Calendar;
@@ -31,9 +32,9 @@ public class BootDeviceReceiver extends BroadcastReceiver {
             Toast.makeText(context, "ACTION_BOOT_COMPLETED", Toast.LENGTH_LONG).show();
             //startAlarm(context);
             startMainService(context);
-        } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
-            Toast.makeText(context, "ACTION_SCREEN_ON", Toast.LENGTH_LONG).show();
         }
+
+
     }
 
     private void startAlarm(Context context)
@@ -67,7 +68,17 @@ public class BootDeviceReceiver extends BroadcastReceiver {
     }
 
     private void startMainService(Context context) {
-        Intent intent = new Intent(context, MainService.class);
-        context.startService(intent);
+        try {
+            Intent intent = new Intent(context, MainService.class);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Toast.makeText(context, "startForegroundService", Toast.LENGTH_LONG).show();
+                context.startForegroundService(intent);
+            } else {
+                Toast.makeText(context, "startService", Toast.LENGTH_LONG).show();
+                context.startService(intent);
+            }
+        } catch (Exception e) {
+            Toast.makeText(context, "Fail: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 }
