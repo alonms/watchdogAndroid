@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.widget.Toast;
 
@@ -15,7 +17,14 @@ import java.util.Calendar;
 public class BootDeviceReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Toast.makeText(context, "signWatchdog 1.0.24", Toast.LENGTH_LONG).show();
+        try {
+            PackageManager manager = context.getPackageManager();
+            PackageInfo info = manager.getPackageInfo(context.getPackageName(), 0);
+            Toast.makeText(context, "signWatchdog " + info.versionName, Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Toast.makeText(context, "signWatchdog NA", Toast.LENGTH_LONG).show();
+        }
+
 
         String action = intent.getAction();
         if (Intent.ACTION_BOOT_COMPLETED.equals(action)) {
