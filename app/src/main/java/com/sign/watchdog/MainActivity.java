@@ -1,7 +1,9 @@
 package com.sign.watchdog;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -26,6 +28,19 @@ public class MainActivity extends AppCompatActivity  {
         if (!Settings.canDrawOverlays(getApplicationContext())) {
             startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION));
         }
+
+
+/*
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECEIVE_BOOT_COMPLETED)){
+            Toast.makeText(this,"permission RECEIVE_BOOT_COMPLETED enabled",Toast.LENGTH_LONG).show();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_BOOT_COMPLETED}, 1);
+        }
+*/
+
+
+
+
 
         SharedPreferences userDetails = getSharedPreferences("userdetails", MODE_PRIVATE);
         int rebootsPerDay = userDetails.getInt("rebootsPerDay", 1);
@@ -60,6 +75,7 @@ public class MainActivity extends AppCompatActivity  {
 
         //test();
     }
+
 
     void test() {
         Intent intent = new Intent(this, MainService.class);
