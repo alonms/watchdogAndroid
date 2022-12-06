@@ -30,8 +30,8 @@ public class BootDeviceReceiver extends BroadcastReceiver {
         String action = intent.getAction();
         if (Intent.ACTION_BOOT_COMPLETED.equals(action)) {
             Toast.makeText(context, "ACTION_BOOT_COMPLETED", Toast.LENGTH_LONG).show();
-            //startAlarm(context);
-            startMainService(context);
+            startAlarm(context);
+            //startMainService(context);
         }
 
 
@@ -49,7 +49,7 @@ public class BootDeviceReceiver extends BroadcastReceiver {
             long rebootsPerDay = userDetails.getInt("rebootsPerDay", 1);
             if (rebootsPerDay>0) {
                 if (rebootsPerDay==4)
-                    rebootsPerDay = 24 * 60;
+                    rebootsPerDay = 24 * 12;
                 long intervalTime = AlarmManager.INTERVAL_DAY / rebootsPerDay;
                 long currentTime = System.currentTimeMillis();
                 long startTime = currentTime / intervalTime;
