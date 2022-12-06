@@ -43,13 +43,13 @@ public class BootDeviceReceiver extends BroadcastReceiver {
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_VIEW);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            intent.setData(Uri.parse("https://dev.signage.me/installplayer/"));
+            intent.setData(Uri.parse("https://galaxy.signage.me/installplayer/"));
             PendingIntent pendingIntent = (PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE));
             SharedPreferences userDetails = context.getSharedPreferences("userdetails", Context.MODE_PRIVATE);
             long rebootsPerDay = userDetails.getInt("rebootsPerDay", 1);
             if (rebootsPerDay>0) {
                 if (rebootsPerDay==4)
-                    rebootsPerDay = 24 * 12;
+                    rebootsPerDay = 24;
                 long intervalTime = AlarmManager.INTERVAL_DAY / rebootsPerDay;
                 long currentTime = System.currentTimeMillis();
                 long startTime = currentTime / intervalTime;
