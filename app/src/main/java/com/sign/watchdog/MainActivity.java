@@ -2,9 +2,14 @@ package com.sign.watchdog;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import android.Manifest;
 import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -75,8 +80,28 @@ public class MainActivity extends AppCompatActivity  {
 
 
         //startMainService(this);
+        //createNotification(this);
     }
 
+
+    private void createNotification(Context context) {
+        //Creating a notification channel
+        NotificationChannel channel=new NotificationChannel("channel1",
+                "hello",
+                NotificationManager.IMPORTANCE_HIGH);
+        NotificationManager manager=(NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        manager.createNotificationChannel(channel);
+
+        //Creating the notification object
+        NotificationCompat.Builder notification=new NotificationCompat.Builder(this,"channel1");
+        //notification.setAutoCancel(true);
+        notification.setContentTitle("Hi this is a notification");
+        notification.setContentText("Hello you");
+        notification.setSmallIcon(R.drawable.ic_launcher_foreground);
+
+        //make the notification manager to issue a notification on the notification's channel
+        manager.notify(121,notification.build());
+    }
 
 
 

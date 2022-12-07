@@ -74,7 +74,7 @@ public class BootDeviceReceiver extends BroadcastReceiver {
 
             // Create intent to invoke the background service.
             Intent intent = new Intent(context, MainService.class);
-            PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getForegroundService(context, 0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
             long startTime = System.currentTimeMillis();
             long intervalTime = 10 * 1000;
