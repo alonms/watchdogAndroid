@@ -14,6 +14,7 @@ import android.os.Build;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.TimeZone;
 
 public class BootDeviceReceiver extends BroadcastReceiver {
     @Override
@@ -80,7 +81,9 @@ public class BootDeviceReceiver extends BroadcastReceiver {
                 if (rebootsPerDay == 4)
                     rebootsPerDay = 24 * 12;
                 intervalTime = AlarmManager.INTERVAL_DAY / rebootsPerDay;
-                long currentTime = System.currentTimeMillis();
+                Calendar cal = Calendar.getInstance();
+                TimeZone tz = cal.getTimeZone();
+                long currentTime = System.currentTimeMillis() + tz.getRawOffset();
                 long startTime = (((long) (currentTime / intervalTime)) + 1L) * intervalTime;
                 long minutes = (startTime - currentTime) / 60000;
                 AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

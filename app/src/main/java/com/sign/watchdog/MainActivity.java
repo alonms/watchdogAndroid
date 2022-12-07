@@ -22,6 +22,8 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity  {
     @Override
@@ -81,6 +83,17 @@ public class MainActivity extends AppCompatActivity  {
 
         //startMainService(this);
         //createNotification(this);
+        //test();
+    }
+
+    private void test() {
+        Calendar cal = Calendar.getInstance();
+        TimeZone tz = cal.getTimeZone();
+        long intervalTime = AlarmManager.INTERVAL_DAY / 3;
+        long currentTime = System.currentTimeMillis() + tz.getRawOffset();
+        long startTime = (((long) (currentTime / intervalTime)) + 1L) * intervalTime;
+        long minutes = (startTime - currentTime) / 60000;
+
     }
 
 
