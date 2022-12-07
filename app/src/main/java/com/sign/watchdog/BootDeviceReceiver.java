@@ -70,18 +70,21 @@ public class BootDeviceReceiver extends BroadcastReceiver {
 
     private void startMainService(Context context) {
         try {
-            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-
-            // Create intent to invoke the background service.
-            Intent intent = new Intent(context, MainService.class);
-            PendingIntent pendingIntent = PendingIntent.getForegroundService(context, 0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-
-            long startTime = System.currentTimeMillis();
-            long intervalTime = 10 * 1000;
-            Toast.makeText(context, "Set Alarm", Toast.LENGTH_LONG).show();
-
-            // Create repeat alarm.
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, intervalTime, pendingIntent);
+            SharedPreferences userDetails = context.getSharedPreferences("userdetails", Context.MODE_PRIVATE);
+            long rebootsPerDay = userDetails.getInt("rebootsPerDay", 1);
+            long intervalTime;
+            if (rebootsPerDay > 0) {
+                if (rebootsPerDay == 4)
+                    rebootsPerDay = 24 * 12;
+                intervalTime = AlarmManager.INTERVAL_DAY / rebootsPerDay;
+                long currentTime = System.currentTimeMillis();
+                long startTime = (((long) (currentTime / intervalTime)) + 1L) * intervalTime;
+                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                Intent intent = new Intent(context, MainService.class);
+                PendingIntent pendingIntent = PendingIntent.getForegroundService(context, 0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                Toast.makeText(context, "Set Alarm", Toast.LENGTH_LONG).show();
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, intervalTime, pendingIntent);
+            }
         } catch (Exception e) {
             Toast.makeText(context, "Fail: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
