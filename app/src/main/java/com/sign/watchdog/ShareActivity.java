@@ -11,6 +11,8 @@ public class ShareActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Toast.makeText(this, "Got it!!", Toast.LENGTH_LONG).show();
+        /*???
         Intent intent = getIntent();
         Uri data = intent.getData();
         String host = data.getHost();
@@ -24,7 +26,7 @@ public class ShareActivity extends Activity {
             intent2.setData(Uri.parse("https://dev.signage.me/installplayer/"));
             startActivity(intent2);
         }
-
+*/
 
         finish();
     }
