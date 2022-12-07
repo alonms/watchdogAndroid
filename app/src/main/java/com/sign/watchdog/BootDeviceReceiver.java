@@ -30,8 +30,8 @@ public class BootDeviceReceiver extends BroadcastReceiver {
         String action = intent.getAction();
         if (Intent.ACTION_BOOT_COMPLETED.equals(action)) {
             Toast.makeText(context, "ACTION_BOOT_COMPLETED", Toast.LENGTH_LONG).show();
-            startAlarm(context);
-            //startMainService(context);
+            //startAlarm(context);
+            startMainService(context);
         }
 
 
@@ -70,16 +70,22 @@ public class BootDeviceReceiver extends BroadcastReceiver {
 
     private void startMainService(Context context) {
         try {
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+            // Create intent to invoke the background service.
             Intent intent = new Intent(context, MainService.class);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                Toast.makeText(context, "startForegroundService", Toast.LENGTH_LONG).show();
-                context.startForegroundService(intent);
-            } else {
-                Toast.makeText(context, "startService", Toast.LENGTH_LONG).show();
-                context.startService(intent);
-            }
+            PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+            long startTime = System.currentTimeMillis();
+            long intervalTime = 10 * 1000;
+            Toast.makeText(context, "Set Alarm", Toast.LENGTH_LONG).show();
+
+            // Create repeat alarm.
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, intervalTime, pendingIntent);
         } catch (Exception e) {
             Toast.makeText(context, "Fail: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
+
     }
+
 }

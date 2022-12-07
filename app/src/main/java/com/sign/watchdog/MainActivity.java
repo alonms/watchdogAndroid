@@ -73,12 +73,32 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
 
-        //test();
+
+        //startMainService(this);
     }
 
 
-    void test() {
-        Intent intent = new Intent(this, MainService.class);
-        startService(intent);
+
+
+    private void startMainService(Context context) {
+        try {
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+            // Create intent to invoke the background service.
+            Intent intent = new Intent(context, MainService.class);
+            PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+            long startTime = System.currentTimeMillis();
+            long intervalTime = 10 * 1000;
+            Toast.makeText(context, "Set Alarm", Toast.LENGTH_LONG).show();
+
+            // Create repeat alarm.
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, intervalTime, pendingIntent);
+        } catch (Exception e) {
+            Toast.makeText(context, "Fail: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
     }
+
+
 }
