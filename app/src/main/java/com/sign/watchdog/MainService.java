@@ -22,12 +22,12 @@ public class MainService extends Service {
     @Override
     public void onCreate()
     {
-        Toast.makeText(this, "onCreate()", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "onCreate()", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(this, "onStartCommand", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "onStartCommand", Toast.LENGTH_SHORT).show();
         createNotification(this);
         try {
             Intent intent2 = new Intent();

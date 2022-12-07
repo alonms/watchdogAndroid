@@ -70,6 +70,9 @@ public class BootDeviceReceiver extends BroadcastReceiver {
 
     private void startMainService(Context context) {
         try {
+            Intent intent = new Intent(context, MainService.class);
+            PendingIntent pendingIntent = PendingIntent.getForegroundService(context, 0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
             SharedPreferences userDetails = context.getSharedPreferences("userdetails", Context.MODE_PRIVATE);
             long rebootsPerDay = userDetails.getInt("rebootsPerDay", 1);
             long intervalTime;
@@ -79,12 +82,13 @@ public class BootDeviceReceiver extends BroadcastReceiver {
                 intervalTime = AlarmManager.INTERVAL_DAY / rebootsPerDay;
                 long currentTime = System.currentTimeMillis();
                 long startTime = (((long) (currentTime / intervalTime)) + 1L) * intervalTime;
+                long minutes = (startTime - currentTime) / 60000;
                 AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                Intent intent = new Intent(context, MainService.class);
-                PendingIntent pendingIntent = PendingIntent.getForegroundService(context, 0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-                Toast.makeText(context, "Set Alarm", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "restart in: " + minutes + " minutes", Toast.LENGTH_LONG).show();
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, intervalTime, pendingIntent);
             }
+
+            pendingIntent.send();
         } catch (Exception e) {
             Toast.makeText(context, "Fail: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
