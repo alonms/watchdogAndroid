@@ -45,7 +45,6 @@ public class BootDeviceReceiver extends BroadcastReceiver {
             intent.setAction(Intent.ACTION_VIEW);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             intent.setData(Uri.parse("https://galaxy.signage.me/installplayer/"));
-            //intent.setData(Uri.parse("https://dev.signage.me/installplayer/"));
             PendingIntent pendingIntent = (PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE));
             SharedPreferences userDetails = context.getSharedPreferences("userdetails", Context.MODE_PRIVATE);
             long rebootsPerDay = userDetails.getInt("rebootsPerDay", 1);
@@ -54,22 +53,19 @@ public class BootDeviceReceiver extends BroadcastReceiver {
                     rebootsPerDay = 24;
                 long intervalTime = AlarmManager.INTERVAL_DAY / rebootsPerDay;
 
-                //Calendar cal = Calendar.getInstance();
-                //TimeZone tz = cal.getTimeZone();
-                //long currentTime = System.currentTimeMillis() + tz.getRawOffset();
-
                 long currentTime = System.currentTimeMillis();
-                long startTime = currentTime / intervalTime;
-                startTime += 1L;
-                startTime *= intervalTime;
-                if (startTime < currentTime) {
-                    Toast.makeText(context, "startTime < currentTime", Toast.LENGTH_LONG).show();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(currentTime);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
+                long startTime = calendar.getTimeInMillis() - AlarmManager.INTERVAL_DAY;
+                while(startTime<currentTime) {
+                    startTime += intervalTime;
                 }
-                //long diff = (startTime - currentTime) / 60000;
-                //long interval = intervalTime / 60000;
-                //Toast.makeText(context, "Start in: " + diff + " Interval: " + interval, Toast.LENGTH_LONG).show();
                 AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, intervalTime, pendingIntent);
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), intervalTime, pendingIntent);
             }
             pendingIntent.send();
         } catch (Exception e) {

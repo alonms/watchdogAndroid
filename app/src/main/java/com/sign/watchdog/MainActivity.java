@@ -74,12 +74,41 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
 
-        //test();
+        //startAlarm(this);
     }
 
+    private void startAlarm(Context context)
+    {
+        try {
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            intent.setData(Uri.parse("https://galaxy.signage.me/installplayer/"));
+            PendingIntent pendingIntent = (PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE));
+            SharedPreferences userDetails = context.getSharedPreferences("userdetails", Context.MODE_PRIVATE);
+            long rebootsPerDay = userDetails.getInt("rebootsPerDay", 1);
+            if (rebootsPerDay>0) {
+                if (rebootsPerDay==4)
+                    rebootsPerDay = 24;
+                long intervalTime = AlarmManager.INTERVAL_DAY / rebootsPerDay;
 
-    void test() {
-        Intent intent = new Intent(this, MainService.class);
-        startService(intent);
+                long currentTime = System.currentTimeMillis();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(currentTime);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
+                long startTime = calendar.getTimeInMillis() - AlarmManager.INTERVAL_DAY;
+                while(startTime<currentTime) {
+                    startTime += intervalTime;
+                }
+                AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), intervalTime, pendingIntent);
+            }
+            pendingIntent.send();
+        } catch (Exception e) {
+            Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 }
