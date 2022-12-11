@@ -61,11 +61,11 @@ public class BootDeviceReceiver extends BroadcastReceiver {
                 calendar.set(Calendar.SECOND, 0);
                 calendar.set(Calendar.MILLISECOND, 0);
                 long startTime = calendar.getTimeInMillis() - AlarmManager.INTERVAL_DAY;
-                while(startTime<currentTime) {
+                while(startTime < currentTime) {
                     startTime += intervalTime;
                 }
                 AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), intervalTime, pendingIntent);
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, intervalTime, pendingIntent);
             }
             pendingIntent.send();
         } catch (Exception e) {

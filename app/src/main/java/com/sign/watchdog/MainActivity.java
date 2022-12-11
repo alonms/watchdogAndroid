@@ -92,19 +92,22 @@ public class MainActivity extends AppCompatActivity  {
                     rebootsPerDay = 24;
                 long intervalTime = AlarmManager.INTERVAL_DAY / rebootsPerDay;
 
-                long currentTime = System.currentTimeMillis();
+                long currentTime = System.currentTimeMillis() + AlarmManager.INTERVAL_HOUR;
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(currentTime);
                 calendar.set(Calendar.HOUR_OF_DAY, 0);
                 calendar.set(Calendar.MINUTE, 0);
                 calendar.set(Calendar.SECOND, 0);
                 calendar.set(Calendar.MILLISECOND, 0);
+                long midnight = calendar.getTimeInMillis();
+                //long startTime = midnight;
                 long startTime = calendar.getTimeInMillis() - AlarmManager.INTERVAL_DAY;
-                while(startTime<currentTime) {
+                while(startTime < currentTime) {
                     startTime += intervalTime;
                 }
+                long diff = (startTime - currentTime) / 60000;
                 AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), intervalTime, pendingIntent);
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, intervalTime, pendingIntent);
             }
             pendingIntent.send();
         } catch (Exception e) {
