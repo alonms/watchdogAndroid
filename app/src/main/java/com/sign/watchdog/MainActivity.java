@@ -47,9 +47,9 @@ public class MainActivity extends AppCompatActivity  {
 
         SharedPreferences userDetails = getSharedPreferences("userdetails", MODE_PRIVATE);
 
-        if (userDetails.contains("rebootsPerDay")==false) {
+        if (userDetails.contains("deployed")==false) {
             SharedPreferences.Editor editor = userDetails.edit();
-            editor.putInt("rebootsPerDay", 1);
+            editor.putInt("deployed", 1);
             editor.commit();
             deploy();
         }
