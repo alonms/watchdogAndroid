@@ -57,12 +57,6 @@ public class MainActivity extends AppCompatActivity  {
 
         SharedPreferences userDetails = getSharedPreferences("userdetails", MODE_PRIVATE);
 
-        if (userDetails.contains("deployed")==false) {
-            SharedPreferences.Editor editor = userDetails.edit();
-            editor.putInt("deployed", 1);
-            editor.commit();
-            deploy();
-        }
 
         int rebootsPerDay = userDetails.getInt("rebootsPerDay", 1);
         RadioGroup radioGroup = findViewById(R.id.radioGroup);
