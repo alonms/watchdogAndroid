@@ -16,11 +16,13 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Calendar;
@@ -76,8 +78,13 @@ public class MainActivity extends AppCompatActivity  {
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
                     public void onActivityResult(ActivityResult result) {
+                        TextView msg = findViewById(R.id.textView2);
+
                         if (Settings.canDrawOverlays(getApplicationContext())) {
                             deploy();
+                        } else {
+                            msg.setText("signWatchdog is not configure properly, please restart the app and then select \"Appear on top\" for signWatchdog");
+                            msg.setTextColor(Color.RED);
                         }
                     }
                 });
