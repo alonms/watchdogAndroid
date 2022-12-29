@@ -66,23 +66,24 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
 
+        requestDrawOverlays();
+    }
+
+    private void requestDrawOverlays() {
         if (!Settings.canDrawOverlays(getApplicationContext())) {
             ActivityResultLauncher<Intent> ativityResultLauncher = registerForActivityResult(
-                    new ActivityResultContracts.StartActivityForResult(),
-                    new ActivityResultCallback<ActivityResult>() {
-                        @Override
-                        public void onActivityResult(ActivityResult result) {
-                            if (Settings.canDrawOverlays(getApplicationContext())) {
-                                deploy();
-                            }
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (Settings.canDrawOverlays(getApplicationContext())) {
+                            deploy();
                         }
-                    });
-
-            //Create Intent
+                    }
+                });
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
             ativityResultLauncher.launch(intent);
         }
-
     }
 
     private void deploy() {
