@@ -35,29 +35,7 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
 
 
-        if (!Settings.canDrawOverlays(getApplicationContext())) {
-            ActivityResultLauncher<Intent> ativityResultLauncher = registerForActivityResult(
-                    new ActivityResultContracts.StartActivityForResult(),
-                    new ActivityResultCallback<ActivityResult>() {
-                        @Override
-                        public void onActivityResult(ActivityResult result) {
-                            if (Settings.canDrawOverlays(getApplicationContext())) {
-                                deploy();
-                            }
-                        }
-                    });
-
-            //Create Intent
-            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
-            ativityResultLauncher.launch(intent);
-        }
-
-
-
-
         SharedPreferences userDetails = getSharedPreferences("userdetails", MODE_PRIVATE);
-
-
         int rebootsPerDay = userDetails.getInt("rebootsPerDay", 1);
         RadioGroup radioGroup = findViewById(R.id.radioGroup);
         switch (rebootsPerDay) {
@@ -88,7 +66,23 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
 
-        //startAlarm(this);
+        if (!Settings.canDrawOverlays(getApplicationContext())) {
+            ActivityResultLauncher<Intent> ativityResultLauncher = registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    new ActivityResultCallback<ActivityResult>() {
+                        @Override
+                        public void onActivityResult(ActivityResult result) {
+                            if (Settings.canDrawOverlays(getApplicationContext())) {
+                                deploy();
+                            }
+                        }
+                    });
+
+            //Create Intent
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+            ativityResultLauncher.launch(intent);
+        }
+
     }
 
     private void deploy() {
@@ -102,41 +96,4 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
-    private void startAlarm(Context context)
-    {
-        try {
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_VIEW);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            intent.setData(Uri.parse("https://galaxy.signage.me/installplayer/"));
-            PendingIntent pendingIntent = (PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE));
-            SharedPreferences userDetails = context.getSharedPreferences("userdetails", Context.MODE_PRIVATE);
-            long rebootsPerDay = userDetails.getInt("rebootsPerDay", 1);
-            if (rebootsPerDay>0) {
-                if (rebootsPerDay==4)
-                    rebootsPerDay = 24;
-                long intervalTime = AlarmManager.INTERVAL_DAY / rebootsPerDay;
-
-                long currentTime = System.currentTimeMillis() + AlarmManager.INTERVAL_HOUR;
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(currentTime);
-                calendar.set(Calendar.HOUR_OF_DAY, 0);
-                calendar.set(Calendar.MINUTE, 0);
-                calendar.set(Calendar.SECOND, 0);
-                calendar.set(Calendar.MILLISECOND, 0);
-                long midnight = calendar.getTimeInMillis();
-                //long startTime = midnight;
-                long startTime = calendar.getTimeInMillis() - AlarmManager.INTERVAL_DAY;
-                while(startTime < currentTime) {
-                    startTime += intervalTime;
-                }
-                long diff = (startTime - currentTime) / 60000;
-                AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, intervalTime, pendingIntent);
-            }
-            pendingIntent.send();
-        } catch (Exception e) {
-            Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-    }
 }
