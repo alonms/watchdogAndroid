@@ -6,6 +6,8 @@ import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -44,6 +46,14 @@ public class MainActivity extends AppCompatActivity  {
 
 
         SharedPreferences userDetails = getSharedPreferences("userdetails", MODE_PRIVATE);
+
+        if (userDetails.contains("rebootsPerDay")==false) {
+            SharedPreferences.Editor editor = userDetails.edit();
+            editor.putInt("rebootsPerDay", 1);
+            editor.commit();
+            deploy();
+        }
+
         int rebootsPerDay = userDetails.getInt("rebootsPerDay", 1);
         RadioGroup radioGroup = findViewById(R.id.radioGroup);
         switch (rebootsPerDay) {
@@ -75,6 +85,20 @@ public class MainActivity extends AppCompatActivity  {
         });
 
         //startAlarm(this);
+    }
+
+    private void deploy() {
+        String urlString = "https://galaxy.signage.me/installPlayer/install/deploy.html";
+        Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse(urlString));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setPackage("com.android.chrome");
+        try
+        {
+             startActivity(intent);
+        }
+        catch (ActivityNotFoundException ex)
+        {
+        }
     }
 
     private void startAlarm(Context context)
