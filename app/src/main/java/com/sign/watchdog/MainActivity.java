@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     private void deploy() {
-        String urlString = "http://galaxy.signage.me/installwatchdog/deploy.html";
+        String urlString = "https://galaxy.signage.me/deploy/deploy.html";
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlString));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setPackage("com.android.chrome");
