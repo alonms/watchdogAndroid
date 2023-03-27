@@ -9,16 +9,27 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlarmManager;
+import android.app.AppOpsManager;
 import android.app.PendingIntent;
+import android.app.usage.ConfigurationStats;
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.Settings;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -26,16 +37,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
 import java.util.TimeZone;
+import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity  {
     public static final int REQUEST_CODE = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         SharedPreferences userDetails = getSharedPreferences("userdetails", MODE_PRIVATE);
         int rebootsPerDay = userDetails.getInt("rebootsPerDay", 1);
@@ -69,6 +84,7 @@ public class MainActivity extends AppCompatActivity  {
         });
 
         requestDrawOverlays();
+        requestUsageStats();
     }
 
     private void requestDrawOverlays() {
@@ -90,6 +106,17 @@ public class MainActivity extends AppCompatActivity  {
                 });
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
             ativityResultLauncher.launch(intent);
+        }
+    }
+
+    private void requestUsageStats() {
+        final UsageStatsManager mUsageStatsManager = (UsageStatsManager)this.getSystemService(Context.USAGE_STATS_SERVICE);
+        final long now = System.currentTimeMillis();
+        final List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, now - 1000 * 10, now);
+        boolean granted = (stats != null && !stats.isEmpty());
+        if (granted==false) {
+            Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+            startActivity(intent);
         }
     }
 

@@ -2,16 +2,17 @@ package com.sign.watchdog;
 
 import android.app.AlarmManager;
 import android.app.Service;
-import android.content.BroadcastReceiver;
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.widget.Toast;
+import java.util.Map;
 
 
 public class MainService extends Service {
@@ -20,7 +21,11 @@ public class MainService extends Service {
     private AlarmThread alarmThread;
     long intervalTime = 0;
     long nextTime = 0;
-    IntentFilter intentFilter = null;
+    long time1 = 0;
+    long time2 = 0;
+    long dur1 = 0;
+    long dur2 = 0;
+
 
     public MainService() {
     }
@@ -36,20 +41,10 @@ public class MainService extends Service {
         try {
             Toast.makeText(this, "MainService.onCreate()", Toast.LENGTH_SHORT).show();
             mContext = MainService.this;
-
-            if (alarmThread==null) {
-                SharedPreferences userDetails = getSharedPreferences("userdetails", Context.MODE_PRIVATE);
-                long rebootsPerDay = userDetails.getInt("rebootsPerDay", 1);
-                if (rebootsPerDay > 0) {
-                    if (rebootsPerDay == 4)
-                        rebootsPerDay = 24 * 12;
-                    intervalTime = AlarmManager.INTERVAL_DAY / rebootsPerDay;
-                    alarmThread = new AlarmThread();
-                    alarmThread.start();
-                }
-            }
+            alarmThread = new AlarmThread();
+            alarmThread.start();
         } catch (Exception e) {
-            Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show();
+
         }
     }
 
@@ -59,18 +54,23 @@ public class MainService extends Service {
         return START_STICKY;
     }
 
+
+    private void restartPlayer() {
+        Intent intent2 = new Intent();
+        intent2.setAction(Intent.ACTION_VIEW);
+        intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent2.setData(Uri.parse("https://galaxy.signage.me/installplayer/"));
+        startActivity(intent2);
+    }
+
+
     public Handler mMessageHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
 
             switch (msg.what) {
                 case MESSAGE_RESTART_PLAYER:
-                    Toast.makeText(mContext, "MESSAGE_RESTART_PLAYER", Toast.LENGTH_SHORT).show();
-                    Intent intent2 = new Intent();
-                    intent2.setAction(Intent.ACTION_VIEW);
-                    intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    intent2.setData(Uri.parse("https://dev.signage.me/installplayer/"));
-                    startActivity(intent2);
+                    restartPlayer();
                     break;
             }
             super.handleMessage(msg);
@@ -78,23 +78,50 @@ public class MainService extends Service {
     };
 
 
+
+
     public class AlarmThread extends Thread
     {
+        public boolean isAppRunning() {
+            try {
+                UsageStatsManager usm = (UsageStatsManager)mContext.getSystemService("usagestats");
+                long currentTime = System.currentTimeMillis();
+                Map<String, UsageStats> appMap = usm.queryAndAggregateUsageStats(0, currentTime);
+                UsageStats usageStats = appMap.get("com.sec.android.app.sbrowser");
+                dur2 = dur1;
+                time2 = time1;
+                time1 = (currentTime - usageStats.getLastTimeStamp()) / 1000;
+                dur1 = usageStats.getTotalTimeVisible() / 1000;
+                if (time1 < time2 && dur1 > dur2) {
+                    return false;
+                }
+            } catch (Exception e) {
+
+            }
+            return true;
+        }
+
+
         public void run()
         {
+            try {
+                mMessageHandler.sendEmptyMessage(MESSAGE_RESTART_PLAYER);
+                sleep(20000);
+            } catch (Exception e) {
+
+            }
+
             while (true) {
                 try {
-
-                    long currentTime = System.currentTimeMillis();
-                    if (currentTime > nextTime) {
-                        nextTime = (((long)(currentTime / intervalTime)) + 1L) * intervalTime;
+                    sleep(5000);
+                    if (!isAppRunning()) {
                         mMessageHandler.sendEmptyMessage(MESSAGE_RESTART_PLAYER);
                     }
-                    sleep(5000);
                 } catch (Exception e) {
 
                 }
             }
         }
+
     }
 }
