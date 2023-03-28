@@ -28,6 +28,7 @@ import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
@@ -36,6 +37,10 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -47,10 +52,34 @@ public class MainActivity extends AppCompatActivity  {
     public static final int REQUEST_CODE = 1;
 
 
+    public void showRunningApps() {
+        try {
+            String str = "";
+            UsageStatsManager usm = (UsageStatsManager)this.getSystemService("usagestats");
+            long currentTime = System.currentTimeMillis();
+            List<UsageStats> appList = usm.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, 0, currentTime);
+            for(int i=0; i<appList.size(); i++) {
+                UsageStats usageStats = appList.get(i);
+                long t1 = (currentTime - usageStats.getLastTimeStamp()) / 1000;
+                if (t1 > 0 && t1 < 60 ) {
+                    str += usageStats.getPackageName() + " " + String.valueOf(t1) + "\n";
+                }
+            }
+            TextView msg = findViewById(R.id.textView2);
+            msg.setText(str);
+
+        } catch (Exception e) {
+
+        }
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        showRunningApps();
 
         SharedPreferences userDetails = getSharedPreferences("userdetails", MODE_PRIVATE);
         int rebootsPerDay = userDetails.getInt("rebootsPerDay", 1);

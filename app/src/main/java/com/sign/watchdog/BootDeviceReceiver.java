@@ -44,7 +44,8 @@ public class BootDeviceReceiver extends BroadcastReceiver {
             startAlarm(context);
 
             Intent serviceIntent = new Intent(context, MainService.class);
-            context.startService(serviceIntent);
+            context.startService(serviceIntent);  // S21
+            //context.startForegroundService(serviceIntent);
         }
     }
 
