@@ -102,35 +102,6 @@ public class MainService extends Service {
 
     }
 
-    private void isAppRunning() {
-        try {
-            Log.d("Watchdog", "isAppRunning 1");
-            long currentTime = System.currentTimeMillis();
-
-            UsageStatsManager usm = (UsageStatsManager)mContext.getSystemService("usagestats");
-
-
-            Map<String, UsageStats> appMap = usm.queryAndAggregateUsageStats(0, currentTime);
-            // UsageStats usageStats = appMap.get("com.sec.android.app.sbrowser");   // S21
-            UsageStats usageStats = appMap.get("com.android.chrome");
-            if (usageStats==null) {
-                Log.d("Watchdog", "Not running1 !!!");
-                running = false;
-                return;
-            }
-
-            dur2 = dur1;
-            time2 = time1;
-            time1 = (currentTime - usageStats.getLastTimeStamp()) / 1000;
-            //dur1 = usageStats.getTotalTimeVisible() / 1000;
-            if (time1 < time2 /*&& dur1 > dur2*/) {
-                running = false;
-                Log.d("Watchdog", "Not running2 !!!");
-            }
-        } catch (Exception e) {
-            Log.e("Watchdog3", e.getMessage());
-        }
-    }
 
 
     public Handler mMessageHandler = new Handler() {
@@ -140,9 +111,6 @@ public class MainService extends Service {
             switch (msg.what) {
                 case MESSAGE_RESTART_PLAYER:
                     restartPlayer();
-                    break;
-                case MESSAGE_IS_RUNNING:
-                    isAppRunning();
                     break;
             }
             super.handleMessage(msg);
@@ -154,11 +122,35 @@ public class MainService extends Service {
 
     public class AlarmThread extends Thread
     {
+        private void isAppRunning() {
+            try {
+                UsageStatsManager usm = (UsageStatsManager)mContext.getSystemService("usagestats");
+                long currentTime = System.currentTimeMillis();
+                Map<String, UsageStats> appMap = usm.queryAndAggregateUsageStats(0, currentTime);
+                // UsageStats usageStats = appMap.get("com.sec.android.app.sbrowser");   // S21
+                UsageStats usageStats = appMap.get("com.android.chrome");
+                if (usageStats==null) {
+                    Log.d("Watchdog", "Not running1 !!!");
+                    running = false;
+                    return;
+                }
+
+                dur2 = dur1;
+                time2 = time1;
+                time1 = (currentTime - usageStats.getLastTimeStamp()) / 1000;
+                //dur1 = usageStats.getTotalTimeVisible() / 1000;
+                if (time1 < time2 /*&& dur1 > dur2*/) {
+                    running = false;
+                    Log.d("Watchdog", "Not running2 !!!");
+                }
+            } catch (Exception e) {
+                Log.e("Watchdog3", e.getMessage());
+            }
+        }
 
 
         public void run()
         {
-
             try {
                 mMessageHandler.sendEmptyMessage(MESSAGE_RESTART_PLAYER);
                 sleep(10000);
@@ -170,10 +162,11 @@ public class MainService extends Service {
 
             while (true) {
                 try {
-                    mMessageHandler.sendEmptyMessage(MESSAGE_IS_RUNNING);
+                    isAppRunning();
                     sleep(5000);
                     if (!running) {
                         mMessageHandler.sendEmptyMessage(MESSAGE_RESTART_PLAYER);
+                        running = true;
                     }
                 } catch (Exception e) {
 
