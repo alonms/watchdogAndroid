@@ -48,9 +48,7 @@
             android:exported="true">
         </receiver>
         <service
-            android:name="com.sign.watchdog.MainService"
-            android:enabled="true"
-            android:exported="true">
+            android:name="com.sign.watchdog.MainService">
         </service>
 
         <activity

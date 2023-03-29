@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.Calendar;
@@ -29,6 +30,7 @@ public class BootDeviceReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         try {
+            Log.d("Alon", "onReceive");
             mContext = context;
             PackageManager manager = context.getPackageManager();
             PackageInfo info = manager.getPackageInfo(context.getPackageName(), 0);
@@ -36,16 +38,27 @@ public class BootDeviceReceiver extends BroadcastReceiver {
         } catch (Exception e) {
             Toast.makeText(context, "signWatchdog NA", Toast.LENGTH_LONG).show();
         }
+        Log.d("Watchdog", "test1");
+
         createRestartIntent(context);
+
+
 
         String action = intent.getAction();
         if (Intent.ACTION_BOOT_COMPLETED.equals(action)) {
             Toast.makeText(context, "ACTION_BOOT_COMPLETED", Toast.LENGTH_LONG).show();
             startAlarm(context);
+            Log.d("Watchdog", "test2");
 
-            Intent serviceIntent = new Intent(context, MainService.class);
-            context.startService(serviceIntent);  // S21
-            //context.startForegroundService(serviceIntent);
+            try {
+                Intent serviceIntent = new Intent(context, MainService.class);
+                context.startService(serviceIntent);  // S21
+                //context.startForegroundService(serviceIntent);
+            } catch (Exception e) {
+                Log.d("Watchdog", e.getMessage());
+            }
+
+
         }
     }
 
@@ -81,10 +94,16 @@ public class BootDeviceReceiver extends BroadcastReceiver {
                 }
                 AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, intervalTime, restartPlayerIntent);
+
+                // TEST
+                //Intent serviceIntent = new Intent(context, MainService.class);
+                //PendingIntent servicePendingIntent = (PendingIntent.getActivity(context, 0, serviceIntent, PendingIntent.FLAG_IMMUTABLE));
+                //startTime = currentTime + 2 * 60 * 1000;
+                //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, intervalTime, servicePendingIntent);
             }
             // restartPlayerIntent.send();
         } catch (Exception e) {
-            Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+            Log.e("Watchdog", e.getMessage());
         }
     }
 }

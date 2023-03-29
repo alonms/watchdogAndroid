@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
@@ -50,7 +51,7 @@ public class MainService extends Service {
     public void onCreate()
     {
         try {
-            Toast.makeText(this, "MainService.onCreate()", Toast.LENGTH_SHORT).show();
+            Log.e("Watchdog", "MainService!!");
             restartPlayer();
             /*
             mContext = MainService.this;
