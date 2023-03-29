@@ -1,26 +1,16 @@
 package com.sign.watchdog;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.app.usage.UsageStats;
-import android.app.usage.UsageStatsManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
-
 import java.util.Calendar;
-import java.util.Map;
-import java.util.TimeZone;
 
 public class BootDeviceReceiver extends BroadcastReceiver {
     private Context mContext;
@@ -94,12 +84,6 @@ public class BootDeviceReceiver extends BroadcastReceiver {
                 }
                 AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, intervalTime, restartPlayerIntent);
-
-                // TEST
-                //Intent serviceIntent = new Intent(context, MainService.class);
-                //PendingIntent servicePendingIntent = (PendingIntent.getActivity(context, 0, serviceIntent, PendingIntent.FLAG_IMMUTABLE));
-                //startTime = currentTime + 2 * 60 * 1000;
-                //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, intervalTime, servicePendingIntent);
             }
             // restartPlayerIntent.send();
         } catch (Exception e) {
