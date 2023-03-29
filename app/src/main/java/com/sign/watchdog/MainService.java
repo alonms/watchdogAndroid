@@ -122,29 +122,18 @@ public class MainService extends Service {
 
     public class AlarmThread extends Thread
     {
-        private void isAppRunning() {
+        private void updateLastTimeStamp() {
             try {
                 UsageStatsManager usm = (UsageStatsManager)mContext.getSystemService("usagestats");
                 long currentTime = System.currentTimeMillis();
                 Map<String, UsageStats> appMap = usm.queryAndAggregateUsageStats(0, currentTime);
                 // UsageStats usageStats = appMap.get("com.sec.android.app.sbrowser");   // S21
                 UsageStats usageStats = appMap.get("com.android.chrome");
-                if (usageStats==null) {
-                    Log.d("Watchdog", "Not running1 !!!");
-                    running = false;
-                    return;
-                }
-
-                dur2 = dur1;
-                time2 = time1;
-                time1 = (currentTime - usageStats.getLastTimeStamp()) / 1000;
-                //dur1 = usageStats.getTotalTimeVisible() / 1000;
-                if (time1 < time2 /*&& dur1 > dur2*/) {
-                    running = false;
-                    Log.d("Watchdog", "Not running2 !!!");
+                if (usageStats!=null) {
+                    time1 = (currentTime - usageStats.getLastTimeStamp()) / 1000;
                 }
             } catch (Exception e) {
-                Log.e("Watchdog3", e.getMessage());
+                Log.e("Watchdog", e.getMessage());
             }
         }
 
@@ -162,12 +151,15 @@ public class MainService extends Service {
 
             while (true) {
                 try {
-                    isAppRunning();
-                    sleep(5000);
-                    if (!running) {
+                    time2 = time1;
+                    updateLastTimeStamp();
+                    Log.e("Watchdog", "time1="+String.valueOf(time1)+" time2="+String.valueOf(time2));
+                    if (time1 < time2) {
                         mMessageHandler.sendEmptyMessage(MESSAGE_RESTART_PLAYER);
-                        running = true;
+                        sleep(5000);
+                        updateLastTimeStamp();
                     }
+                    sleep(5000);
                 } catch (Exception e) {
 
                 }
