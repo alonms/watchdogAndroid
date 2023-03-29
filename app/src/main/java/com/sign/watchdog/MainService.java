@@ -152,10 +152,19 @@ public class MainService extends Service {
 
         public void run()
         {
+            try {
+                mMessageHandler.sendEmptyMessage(MESSAGE_RESTART_PLAYER);
+                sleep(20000);
+            } catch (Exception e) {
+
+            }
+
             while (true) {
                 try {
-                    sleep(60000);
-                    mMessageHandler.sendEmptyMessage(MESSAGE_RESTART_PLAYER);
+                    sleep(5000);
+                    if (!isAppRunning()) {
+                        mMessageHandler.sendEmptyMessage(MESSAGE_RESTART_PLAYER);
+                    }
                 } catch (Exception e) {
 
                 }
