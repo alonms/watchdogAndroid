@@ -1,6 +1,9 @@
 package com.sign.watchdog;
 
 import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
@@ -14,6 +17,8 @@ import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.core.app.NotificationCompat;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -52,13 +57,26 @@ public class MainService extends Service {
     {
         try {
             Log.e("Watchdog", "MainService!!");
-            restartPlayer();
-            /*
+
             mContext = MainService.this;
+
+            String CHANNEL_ID = "my_channel_01";
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
+                    "Channel human readable title",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+
+            ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
+
+            Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setContentTitle("")
+                    .setContentText("").build();
+
+            startForeground(1, notification);
+
+
             alarmThread = new AlarmThread();
             alarmThread.start();
 
-             */
         } catch (Exception e) {
 
         }
@@ -66,18 +84,21 @@ public class MainService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(this, "MainService.onStartCommand()", Toast.LENGTH_SHORT).show();
         return START_STICKY;
     }
 
 
     private void restartPlayer() {
-        Toast.makeText(this, "restartPlayer()", Toast.LENGTH_SHORT).show();
-        Intent intent2 = new Intent();
-        intent2.setAction(Intent.ACTION_VIEW);
-        intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        intent2.setData(Uri.parse("https://galaxy.signage.me/installplayer/"));
-        startActivity(intent2);
+        try {
+            Intent intent2 = new Intent();
+            intent2.setAction(Intent.ACTION_VIEW);
+            intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            intent2.setData(Uri.parse("https://galaxy.signage.me/installplayer/"));
+            startActivity(intent2);
+        } catch (Exception e) {
+            Log.e("Watchdog2", e.getMessage());
+        }
+
     }
 
     private void showToast() {
@@ -131,24 +152,10 @@ public class MainService extends Service {
 
         public void run()
         {
-            try {
-                mMessageHandler.sendEmptyMessage(MESSAGE_RESTART_PLAYER);
-                sleep(20000);
-            } catch (Exception e) {
-
-            }
-
             while (true) {
                 try {
-                    sleep(5000);
-                    toastMsg = "ping";
-                    mMessageHandler.sendEmptyMessage(MESSAGE_TOAST);
-                    /*
-                    if (!isAppRunning()) {
-                        mMessageHandler.sendEmptyMessage(MESSAGE_RESTART_PLAYER);
-                    }
-
-                     */
+                    sleep(60000);
+                    mMessageHandler.sendEmptyMessage(MESSAGE_RESTART_PLAYER);
                 } catch (Exception e) {
 
                 }

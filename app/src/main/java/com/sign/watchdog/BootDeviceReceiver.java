@@ -52,8 +52,8 @@ public class BootDeviceReceiver extends BroadcastReceiver {
 
             try {
                 Intent serviceIntent = new Intent(context, MainService.class);
-                context.startService(serviceIntent);  // S21
-                //context.startForegroundService(serviceIntent);
+                //context.startService(serviceIntent);  // S21
+                context.startForegroundService(serviceIntent);
             } catch (Exception e) {
                 Log.d("Watchdog", e.getMessage());
             }
