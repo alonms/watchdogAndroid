@@ -114,7 +114,9 @@ public class MainService extends Service {
             // UsageStats usageStats = appMap.get("com.sec.android.app.sbrowser");   // S21
             UsageStats usageStats = appMap.get("com.android.chrome");
             if (usageStats==null) {
+                Log.d("Watchdog", "Not running1 !!!");
                 running = false;
+                return;
             }
 
             dur2 = dur1;
@@ -123,6 +125,7 @@ public class MainService extends Service {
             //dur1 = usageStats.getTotalTimeVisible() / 1000;
             if (time1 < time2 /*&& dur1 > dur2*/) {
                 running = false;
+                Log.d("Watchdog", "Not running2 !!!");
             }
         } catch (Exception e) {
             Log.e("Watchdog3", e.getMessage());
