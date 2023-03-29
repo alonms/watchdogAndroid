@@ -20,7 +20,7 @@ public class BootDeviceReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         try {
-            Log.d("Alon", "onReceive");
+            Log.d("Watchdog", "onReceive");
             mContext = context;
             PackageManager manager = context.getPackageManager();
             PackageInfo info = manager.getPackageInfo(context.getPackageName(), 0);
@@ -28,18 +28,11 @@ public class BootDeviceReceiver extends BroadcastReceiver {
         } catch (Exception e) {
             Toast.makeText(context, "signWatchdog NA", Toast.LENGTH_LONG).show();
         }
-        Log.d("Watchdog", "test1");
-
         createRestartIntent(context);
-
-
-
         String action = intent.getAction();
         if (Intent.ACTION_BOOT_COMPLETED.equals(action)) {
             Toast.makeText(context, "ACTION_BOOT_COMPLETED", Toast.LENGTH_LONG).show();
             startAlarm(context);
-            Log.d("Watchdog", "test2");
-
             try {
                 Intent serviceIntent = new Intent(context, MainService.class);
                 //context.startService(serviceIntent);  // S21
@@ -47,8 +40,6 @@ public class BootDeviceReceiver extends BroadcastReceiver {
             } catch (Exception e) {
                 Log.d("Watchdog", e.getMessage());
             }
-
-
         }
     }
 
@@ -70,7 +61,6 @@ public class BootDeviceReceiver extends BroadcastReceiver {
                 if (rebootsPerDay==4)
                     rebootsPerDay = 24;
                 long intervalTime = AlarmManager.INTERVAL_DAY / rebootsPerDay;
-
                 long currentTime = System.currentTimeMillis();
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(currentTime);
@@ -85,7 +75,6 @@ public class BootDeviceReceiver extends BroadcastReceiver {
                 AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, intervalTime, restartPlayerIntent);
             }
-            // restartPlayerIntent.send();
         } catch (Exception e) {
             Log.e("Watchdog", e.getMessage());
         }

@@ -57,21 +57,16 @@ public class MainService extends Service {
     public void onCreate()
     {
         try {
-            Log.e("Watchdog", "MainService!!");
-
+            Log.e("Watchdog", "MainService started");
             mContext = MainService.this;
-
             String CHANNEL_ID = "my_channel_01";
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
                     "Channel human readable title",
                     NotificationManager.IMPORTANCE_DEFAULT);
-
             ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
-
             Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                     .setContentTitle("")
                     .setContentText("").build();
-
             startForeground(1, notification);
 
 
@@ -91,6 +86,7 @@ public class MainService extends Service {
 
     private void restartPlayer() {
         try {
+            Log.e("Watchdog", "restartPlayer");
             Intent intent2 = new Intent();
             intent2.setAction(Intent.ACTION_VIEW);
             intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -140,7 +136,9 @@ public class MainService extends Service {
 
         public void run()
         {
+            Log.e("Watchdog", "Thread started");
             try {
+
                 mMessageHandler.sendEmptyMessage(MESSAGE_RESTART_PLAYER);
                 sleep(10000);
             } catch (Exception e) {
