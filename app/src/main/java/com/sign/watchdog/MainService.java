@@ -151,15 +151,13 @@ public class MainService extends Service {
 
             while (true) {
                 try {
-                    time2 = time1;
-                    updateLastTimeStamp();
                     Log.e("Watchdog", "time1="+String.valueOf(time1)+" time2="+String.valueOf(time2));
                     if (time1 < time2) {
                         mMessageHandler.sendEmptyMessage(MESSAGE_RESTART_PLAYER);
-                        sleep(5000);
-                        updateLastTimeStamp();
                     }
+                    time2 = time1;
                     sleep(5000);
+                    updateLastTimeStamp();
                 } catch (Exception e) {
 
                 }
