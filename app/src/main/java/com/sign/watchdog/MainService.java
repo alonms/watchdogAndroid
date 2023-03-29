@@ -32,7 +32,7 @@ import java.util.Map;
 
 public class MainService extends Service {
     private static final int MESSAGE_RESTART_PLAYER = 100;
-    private static final int MESSAGE_TOAST = 101;
+    private static final int MESSAGE_IS_RUNNING = 101;
     private Context mContext;
     private String toastMsg = "";
     private AlarmThread alarmThread;
@@ -42,6 +42,7 @@ public class MainService extends Service {
     long time2 = 0;
     long dur1 = 0;
     long dur2 = 0;
+    boolean running = true;
 
 
     public MainService() {
@@ -101,9 +102,33 @@ public class MainService extends Service {
 
     }
 
-    private void showToast() {
-        Toast.makeText(this, toastMsg, Toast.LENGTH_SHORT).show();
+    private void isAppRunning() {
+        try {
+            Log.d("Watchdog", "isAppRunning 1");
+            long currentTime = System.currentTimeMillis();
+
+            UsageStatsManager usm = (UsageStatsManager)mContext.getSystemService("usagestats");
+
+
+            Map<String, UsageStats> appMap = usm.queryAndAggregateUsageStats(0, currentTime);
+            // UsageStats usageStats = appMap.get("com.sec.android.app.sbrowser");   // S21
+            UsageStats usageStats = appMap.get("com.android.chrome");
+            if (usageStats==null) {
+                running = false;
+            }
+
+            dur2 = dur1;
+            time2 = time1;
+            time1 = (currentTime - usageStats.getLastTimeStamp()) / 1000;
+            //dur1 = usageStats.getTotalTimeVisible() / 1000;
+            if (time1 < time2 /*&& dur1 > dur2*/) {
+                running = false;
+            }
+        } catch (Exception e) {
+            Log.e("Watchdog3", e.getMessage());
+        }
     }
+
 
     public Handler mMessageHandler = new Handler() {
         @Override
@@ -113,8 +138,8 @@ public class MainService extends Service {
                 case MESSAGE_RESTART_PLAYER:
                     restartPlayer();
                     break;
-                case MESSAGE_TOAST:
-                    showToast();
+                case MESSAGE_IS_RUNNING:
+                    isAppRunning();
                     break;
             }
             super.handleMessage(msg);
@@ -126,43 +151,25 @@ public class MainService extends Service {
 
     public class AlarmThread extends Thread
     {
-        public boolean isAppRunning() {
-            try {
-                UsageStatsManager usm = (UsageStatsManager)mContext.getSystemService("usagestats");
-                long currentTime = System.currentTimeMillis();
-                Map<String, UsageStats> appMap = usm.queryAndAggregateUsageStats(0, currentTime);
-                // UsageStats usageStats = appMap.get("com.sec.android.app.sbrowser");   // S21
-                UsageStats usageStats = appMap.get("com.android.chrome");
-                if (usageStats==null) {
-                    return false;
-                }
-                dur2 = dur1;
-                time2 = time1;
-                time1 = (currentTime - usageStats.getLastTimeStamp()) / 1000;
-                dur1 = usageStats.getTotalTimeVisible() / 1000;
-                if (time1 < time2 && dur1 > dur2) {
-                    return false;
-                }
-            } catch (Exception e) {
-
-            }
-            return true;
-        }
 
 
         public void run()
         {
+
             try {
                 mMessageHandler.sendEmptyMessage(MESSAGE_RESTART_PLAYER);
-                sleep(20000);
+                sleep(10000);
             } catch (Exception e) {
 
             }
 
+
+
             while (true) {
                 try {
+                    mMessageHandler.sendEmptyMessage(MESSAGE_IS_RUNNING);
                     sleep(5000);
-                    if (!isAppRunning()) {
+                    if (!running) {
                         mMessageHandler.sendEmptyMessage(MESSAGE_RESTART_PLAYER);
                     }
                 } catch (Exception e) {
