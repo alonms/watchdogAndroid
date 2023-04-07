@@ -57,7 +57,7 @@ public class MainService extends Service {
     public void onCreate()
     {
         try {
-            Log.e("Watchdog", "MainService started");
+            Log.d("Watchdog", "MainService started");
             mContext = MainService.this;
             String CHANNEL_ID = "my_channel_01";
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
@@ -86,14 +86,14 @@ public class MainService extends Service {
 
     private void restartPlayer() {
         try {
-            Log.e("Watchdog", "restartPlayer");
+            Log.d("Watchdog", "restartPlayer");
             Intent intent2 = new Intent();
             intent2.setAction(Intent.ACTION_VIEW);
             intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             intent2.setData(Uri.parse("https://galaxy.signage.me/installplayer/"));
             startActivity(intent2);
         } catch (Exception e) {
-            Log.e("Watchdog2", e.getMessage());
+            Log.e("Watchdog", e.getMessage());
         }
 
     }
@@ -136,7 +136,7 @@ public class MainService extends Service {
 
         public void run()
         {
-            Log.e("Watchdog", "Thread started");
+            Log.d("Watchdog", "Thread started");
             try {
 
                 mMessageHandler.sendEmptyMessage(MESSAGE_RESTART_PLAYER);
@@ -149,7 +149,7 @@ public class MainService extends Service {
 
             while (true) {
                 try {
-                    Log.e("Watchdog", "time1="+String.valueOf(time1)+" time2="+String.valueOf(time2));
+                    Log.d("Watchdog", "time1="+String.valueOf(time1)+" time2="+String.valueOf(time2));
                     if (time1 < time2) {
                         mMessageHandler.sendEmptyMessage(MESSAGE_RESTART_PLAYER);
                     }
