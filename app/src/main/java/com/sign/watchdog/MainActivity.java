@@ -80,9 +80,9 @@ public class MainActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        showRunningApps();
+        // showRunningApps();
 
-        Log.d("Alon", "showRunningApps()");
+        Log.d("Watchdog", "showRunningApps()");
 
         SharedPreferences userDetails = getSharedPreferences("userdetails", MODE_PRIVATE);
         int rebootsPerDay = userDetails.getInt("rebootsPerDay", 1);
