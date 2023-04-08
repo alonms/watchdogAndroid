@@ -32,7 +32,7 @@ import java.util.Map;
 
 public class MainService extends Service {
     private static final int MESSAGE_RESTART_PLAYER = 100;
-    private static final int MESSAGE_IS_RUNNING = 101;
+
     private Context mContext;
     private String toastMsg = "";
     private AlarmThread alarmThread;
@@ -99,7 +99,6 @@ public class MainService extends Service {
     }
 
 
-
     public Handler mMessageHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -126,7 +125,8 @@ public class MainService extends Service {
                 // UsageStats usageStats = appMap.get("com.sec.android.app.sbrowser");   // S21
                 UsageStats usageStats = appMap.get("com.android.chrome");
                 if (usageStats!=null) {
-                    time1 = (currentTime - usageStats.getLastTimeStamp()) / 1000;
+                    //time1 = (currentTime - usageStats.getLastTimeStamp()) / 1000;
+                    time1 = (currentTime - usageStats.getLastTimeUsed()) / 1000;
                 }
             } catch (Exception e) {
                 Log.e("Watchdog", e.getMessage());

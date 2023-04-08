@@ -62,12 +62,16 @@ public class MainActivity extends AppCompatActivity  {
             for(int i=0; i<appList.size(); i++) {
                 UsageStats usageStats = appList.get(i);
                 long t1 = (currentTime - usageStats.getLastTimeStamp()) / 1000;
+                long t2 = ( currentTime - usageStats.getLastTimeUsed()) / 1000;
+
                 if (t1 > 0 && t1 < 60 ) {
-                    str += usageStats.getPackageName() + " " + String.valueOf(t1) + "\n";
+                    str += usageStats.getPackageName() + " " + String.valueOf(t1)  + " " + String.valueOf(t2)  + "\n";
+
                 }
             }
-            TextView msg = findViewById(R.id.textView2);
-            msg.setText(str);
+            Log.d("WD", str);
+            //TextView msg = findViewById(R.id.textView2);
+            //msg.setText(str);
 
         } catch (Exception e) {
 
@@ -80,7 +84,9 @@ public class MainActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // showRunningApps();
+        //showRunningApps();
+        //MainActivity.MyThread thread = new MainActivity.MyThread();
+        //thread.start();
 
         Log.d("Watchdog", "showRunningApps()");
 
@@ -160,6 +166,41 @@ public class MainActivity extends AppCompatActivity  {
         try {
             startActivity(intent);
         } catch (ActivityNotFoundException ex) {
+        }
+    }
+
+
+    private void updateLastTimeStamp() {
+        try {
+            UsageStatsManager usm = (UsageStatsManager)getSystemService("usagestats");
+            long currentTime = System.currentTimeMillis();
+            Map<String, UsageStats> appMap = usm.queryAndAggregateUsageStats(0, currentTime);
+            UsageStats usageStats = appMap.get("com.android.chrome");
+            if (usageStats!=null) {
+                long time1 = (currentTime - usageStats.getLastTimeUsed()) / 1000;
+                //long time2 = (currentTime - usageStats.getFirstTimeStamp()) / 1000;
+
+                long time2 = usageStats.getTotalTimeInForeground() / 1000;
+                Log.d("WD", String.valueOf(time2));
+            }
+        } catch (Exception e) {
+            Log.e("Watchdog", e.getMessage());
+        }
+    }
+
+    public class MyThread extends Thread
+    {
+        public void run()
+        {
+            while(true) {
+                updateLastTimeStamp();
+             try {
+                 sleep(1000);
+             } catch (Exception e) {
+
+             }
+
+            }
         }
     }
 
