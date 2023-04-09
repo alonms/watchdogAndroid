@@ -58,18 +58,14 @@ public class MainService extends Service {
     public void onCreate()
     {
         try {
-
             mContext = MainService.this;
-            //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                Log.d("Watchdog", "MainService VER " + String.valueOf(Build.VERSION.SDK_INT));
-                String CHANNEL_ID = "my_channel_01";
-                NotificationChannel channel = new NotificationChannel(CHANNEL_ID,"title", NotificationManager.IMPORTANCE_DEFAULT);
-                ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
-                Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                        .setContentTitle("")
-                        .setContentText("").build();
-                startForeground(1, notification);
-            //}
+            String CHANNEL_ID = "my_channel_01";
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID,"title", NotificationManager.IMPORTANCE_DEFAULT);
+            ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
+            Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setContentTitle("")
+                    .setContentText("").build();
+            startForeground(1, notification);
 
             alarmThread = new AlarmThread();
             alarmThread.start();
