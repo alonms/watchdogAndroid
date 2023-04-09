@@ -92,13 +92,19 @@ public class BaseService extends Service {
     {
         private void updateLastTimeStamp() {
             try {
-                UsageStatsManager usm = (UsageStatsManager)mContext.getSystemService("usagestats");
+                UsageStatsManager usm = (UsageStatsManager)mContext.getSystemService(Context.USAGE_STATS_SERVICE);
                 long currentTime = System.currentTimeMillis();
+
                 Map<String, UsageStats> appMap = usm.queryAndAggregateUsageStats(0, currentTime);
-                // UsageStats usageStats = appMap.get("com.sec.android.app.sbrowser");   // S21
-                UsageStats usageStats = appMap.get("com.android.chrome");
+                UsageStats usageStats = null;
+                if (appMap.containsKey("com.android.chrome")) {
+                    usageStats = appMap.get("com.android.chrome"); // ADZ
+                }/* else if (appMap.containsKey("com.sec.android.app.sbrowser")) {
+                    usageStats = appMap.get("com.sec.android.app.sbrowser"); // S21
+                }
+                */
+
                 if (usageStats!=null) {
-                    //time1 = (currentTime - usageStats.getLastTimeStamp()) / 1000;
                     time1 = (currentTime - usageStats.getLastTimeUsed()) / 1000;
                 }
             } catch (Exception e) {
