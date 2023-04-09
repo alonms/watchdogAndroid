@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 import java.util.Calendar;
@@ -34,9 +35,16 @@ public class BootDeviceReceiver extends BroadcastReceiver {
             Toast.makeText(context, "ACTION_BOOT_COMPLETED", Toast.LENGTH_LONG).show();
             startAlarm(context);
             try {
-                Intent serviceIntent = new Intent(context, MainService.class);
-                //context.startService(serviceIntent);  // S21
-                context.startForegroundService(serviceIntent);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    // ADZ
+                    Intent serviceIntent = new Intent(context, MainService.class);
+                    context.startForegroundService(serviceIntent);
+
+                } else {
+                    // S21
+                    Intent serviceIntent = new Intent(context, MainService.class);
+                    context.startService(serviceIntent);
+                }
             } catch (Exception e) {
                 Log.d("Watchdog", e.getMessage());
             }
