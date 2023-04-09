@@ -90,17 +90,18 @@ public class BaseService extends Service {
 
     public class AlarmThread extends Thread
     {
-        private boolean updateTime(Map<String, UsageStats> appMap, long currentTime, String key) {
+        private long updateTime(Map<String, UsageStats> appMap, long currentTime, String key) {
             try {
-                UsageStats usageStats = appMap.get(key);
-                if (usageStats!=null) {
-                    time1 = (currentTime - usageStats.getLastTimeUsed()) / 1000;
-                    return true;
+                if (appMap.containsKey(key)) {
+                    UsageStats usageStats = appMap.get(key);
+                    if (usageStats != null) {
+                        return (currentTime - usageStats.getLastTimeUsed()) / 1000;
+                    }
                 }
             } catch (Exception e) {
 
             }
-            return false;
+            return 0;
         }
 
         private void updateLastTimeStamp() {
@@ -109,11 +110,10 @@ public class BaseService extends Service {
                 long currentTime = System.currentTimeMillis();
 
                 Map<String, UsageStats> appMap = usm.queryAndAggregateUsageStats(0, currentTime);
-                // ADZ
-                if (updateTime(appMap,currentTime, "com.android.chrome")==false) {
-                    // S21
-                    updateTime(appMap,currentTime, "com.sec.android.app.sbrowser");
-                }
+
+                long t1 = updateTime(appMap,currentTime, "com.android.chrome"); // ADZ
+                long t2 = updateTime(appMap,currentTime, "com.sec.android.app.sbrowser"); // S21
+                time1 = Math.max(t1, t2);
             } catch (Exception e) {
                 Log.e("Watchdog", e.getMessage());
             }
@@ -124,14 +124,12 @@ public class BaseService extends Service {
         {
             Log.d("Watchdog", "Thread started");
             try {
-
+                sleep(5000);
                 mMessageHandler.sendEmptyMessage(MESSAGE_RESTART_PLAYER);
-                sleep(10000);
+                sleep(5000);
             } catch (Exception e) {
 
             }
-
-
 
             while (true) {
                 try {
