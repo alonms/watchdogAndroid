@@ -42,11 +42,6 @@
                 <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver
-            android:name=".ScreenOnReceiver"
-            android:enabled="true"
-            android:exported="true">
-        </receiver>
         <service
             android:name="com.sign.watchdog.MainService">
         </service>
