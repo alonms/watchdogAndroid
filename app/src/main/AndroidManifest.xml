@@ -39,7 +39,7 @@
             </intent-filter>
         </receiver>
         <service
-            android:name="com.sign.watchdog.MainService">
+            android:name="com.sign.watchdog.ForegroundService">
         </service>
 
         <activity

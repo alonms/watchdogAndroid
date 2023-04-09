@@ -7,8 +7,8 @@ import android.content.Context;
 import androidx.core.app.NotificationCompat;
 
 
-public class MainService extends BaseService {
-    public MainService() {
+public class ForegroundService extends BaseService {
+    public ForegroundService() {
         super();
     }
 
@@ -16,7 +16,7 @@ public class MainService extends BaseService {
     public void onCreate()
     {
         try {
-            mContext = MainService.this;
+            mContext = ForegroundService.this;
             String CHANNEL_ID = "my_channel_01";
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID,"title", NotificationManager.IMPORTANCE_DEFAULT);
             ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
