@@ -35,20 +35,13 @@ public class BootDeviceReceiver extends BroadcastReceiver {
             Toast.makeText(context, "ACTION_BOOT_COMPLETED", Toast.LENGTH_LONG).show();
             startAlarm(context);
             try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    // ADZ
-                    Log.d("Watchdog", "ADZ");
-                    Intent serviceIntent = new Intent(context, MainService.class);
-                    context.startForegroundService(serviceIntent);
-
-                } else {
-                    // S21
-                    Log.d("Watchdog", "S21");
-                    Intent serviceIntent = new Intent(context, MainService.class);
-                    context.startService(serviceIntent);
-                }
+                Intent serviceIntent = new Intent(context, MainService.class);
+                context.startService(serviceIntent);
+                Log.d("Watchdog", "S21");
             } catch (Exception e) {
-                Log.d("Watchdog", e.getMessage());
+                Log.d("Watchdog", "ADZ");
+                Intent serviceIntent = new Intent(context, MainService.class);
+                context.startForegroundService(serviceIntent);
             }
         }
     }

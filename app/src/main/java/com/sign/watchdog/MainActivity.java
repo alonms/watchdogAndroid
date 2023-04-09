@@ -27,6 +27,7 @@ import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -83,13 +84,7 @@ public class MainActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //showRunningApps();
-        //MainActivity.MyThread thread = new MainActivity.MyThread();
-        //thread.start();
-
-        Log.d("Watchdog", "showRunningApps()");
-
+        Log.d("MainActivity", "onCreate");
         SharedPreferences userDetails = getSharedPreferences("userdetails", MODE_PRIVATE);
         int rebootsPerDay = userDetails.getInt("rebootsPerDay", 1);
         RadioGroup radioGroup = findViewById(R.id.radioGroup);
