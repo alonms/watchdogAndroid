@@ -92,7 +92,7 @@ public class BaseService extends Service {
     {
         private boolean updateTime(Map<String, UsageStats> appMap, long currentTime, String key) {
             try {
-                UsageStats usageStats = appMap.get("com.android.chrome"); // ADZ
+                UsageStats usageStats = appMap.get(key);
                 if (usageStats!=null) {
                     time1 = (currentTime - usageStats.getLastTimeUsed()) / 1000;
                     return true;
