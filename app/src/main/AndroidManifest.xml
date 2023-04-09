@@ -61,17 +61,6 @@
         </activity>
 
 
-        <activity
-            android:name=".ShareActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="signplayer" />
-            </intent-filter>
-        </activity>
-
     </application>
 
 </manifest>
