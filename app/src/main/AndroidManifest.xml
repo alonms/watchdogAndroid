@@ -38,9 +38,15 @@
                 <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
         <service
             android:name="com.sign.watchdog.ForegroundService">
         </service>
+
+        <service
+            android:name="com.sign.watchdog.MainService">
+        </service>
+
 
         <activity
             android:name=".MainActivity"
