@@ -22,7 +22,7 @@ import java.util.Map;
 public class BaseService extends Service {
     private static final int MESSAGE_RESTART_PLAYER = 100;
 
-    private Context mContext;
+    protected Context mContext;
     private String toastMsg = "";
     private AlarmThread alarmThread;
     long intervalTime = 0;
@@ -42,24 +42,12 @@ public class BaseService extends Service {
         return null;
     }
 
-    @Override
-    public void onCreate()
+    protected void startThread()
     {
         try {
-            mContext = BaseService.this;
-            String CHANNEL_ID = "my_channel_01";
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID,"title", NotificationManager.IMPORTANCE_DEFAULT);
-            ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
-            Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                    .setContentTitle("")
-                    .setContentText("").build();
-            startForeground(1, notification);
-
             alarmThread = new AlarmThread();
             alarmThread.start();
-
         } catch (Exception e) {
-
         }
     }
 

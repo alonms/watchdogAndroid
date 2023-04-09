@@ -16,11 +16,7 @@
     <uses-permission android:name="android.permission.SUBSCRIBE_TO_KEYGUARD_LOCKED_STATE" />
     <uses-permission android:name="android.permission.START_VIEW_APP_FEATURES" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
-
-    <uses-permission
-        android:name="android.permission.PACKAGE_USAGE_STATS"
-        tools:ignore="ProtectedPermissions"/>
-
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -43,7 +39,7 @@
             </intent-filter>
         </receiver>
         <service
-            android:name="com.sign.watchdog.BaseService">
+            android:name="com.sign.watchdog.MainService">
         </service>
 
         <activity
