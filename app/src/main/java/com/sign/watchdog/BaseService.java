@@ -90,22 +90,29 @@ public class BaseService extends Service {
 
     public class AlarmThread extends Thread
     {
+        private boolean updateTime(Map<String, UsageStats> appMap, long currentTime, String key) {
+            try {
+                UsageStats usageStats = appMap.get("com.android.chrome"); // ADZ
+                if (usageStats!=null) {
+                    time1 = (currentTime - usageStats.getLastTimeUsed()) / 1000;
+                    return true;
+                }
+            } catch (Exception e) {
+
+            }
+            return false;
+        }
+
         private void updateLastTimeStamp() {
             try {
                 UsageStatsManager usm = (UsageStatsManager)mContext.getSystemService(Context.USAGE_STATS_SERVICE);
                 long currentTime = System.currentTimeMillis();
 
                 Map<String, UsageStats> appMap = usm.queryAndAggregateUsageStats(0, currentTime);
-                UsageStats usageStats = null;
-                if (appMap.containsKey("com.android.chrome")) {
-                    usageStats = appMap.get("com.android.chrome"); // ADZ
-                }/* else if (appMap.containsKey("com.sec.android.app.sbrowser")) {
-                    usageStats = appMap.get("com.sec.android.app.sbrowser"); // S21
-                }
-                */
-
-                if (usageStats!=null) {
-                    time1 = (currentTime - usageStats.getLastTimeUsed()) / 1000;
+                // ADZ
+                if (updateTime(appMap,currentTime, "com.android.chrome")==false) {
+                    // S21
+                    updateTime(appMap,currentTime, "com.sec.android.app.sbrowser");
                 }
             } catch (Exception e) {
                 Log.e("Watchdog", e.getMessage());
