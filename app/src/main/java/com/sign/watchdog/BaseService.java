@@ -1,6 +1,5 @@
 package com.sign.watchdog;
 
-import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -9,29 +8,18 @@ import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Build;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.util.List;
 import java.util.Map;
 
 
-public class MainService extends Service {
+public class BaseService extends Service {
     private static final int MESSAGE_RESTART_PLAYER = 100;
 
     private Context mContext;
@@ -46,7 +34,7 @@ public class MainService extends Service {
     boolean running = true;
 
 
-    public MainService() {
+    public BaseService() {
     }
 
     @Override
@@ -58,7 +46,7 @@ public class MainService extends Service {
     public void onCreate()
     {
         try {
-            mContext = MainService.this;
+            mContext = BaseService.this;
             String CHANNEL_ID = "my_channel_01";
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID,"title", NotificationManager.IMPORTANCE_DEFAULT);
             ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
