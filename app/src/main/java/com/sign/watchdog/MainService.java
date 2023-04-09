@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
@@ -57,18 +58,18 @@ public class MainService extends Service {
     public void onCreate()
     {
         try {
-            Log.d("Watchdog", "MainService started");
-            mContext = MainService.this;
-            String CHANNEL_ID = "my_channel_01";
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
-                    "Channel human readable title",
-                    NotificationManager.IMPORTANCE_DEFAULT);
-            ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
-            Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                    .setContentTitle("")
-                    .setContentText("").build();
-            startForeground(1, notification);
 
+            mContext = MainService.this;
+            //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Log.d("Watchdog", "MainService ADZ");
+                String CHANNEL_ID = "my_channel_01";
+                NotificationChannel channel = new NotificationChannel(CHANNEL_ID,"title", NotificationManager.IMPORTANCE_DEFAULT);
+                ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
+                Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                        .setContentTitle("")
+                        .setContentText("").build();
+                startForeground(1, notification);
+            //}
 
             alarmThread = new AlarmThread();
             alarmThread.start();

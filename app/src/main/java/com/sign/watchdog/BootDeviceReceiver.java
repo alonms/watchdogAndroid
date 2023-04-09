@@ -37,11 +37,13 @@ public class BootDeviceReceiver extends BroadcastReceiver {
             try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     // ADZ
+                    Log.d("Watchdog", "ADZ");
                     Intent serviceIntent = new Intent(context, MainService.class);
                     context.startForegroundService(serviceIntent);
 
                 } else {
                     // S21
+                    Log.d("Watchdog", "S21");
                     Intent serviceIntent = new Intent(context, MainService.class);
                     context.startService(serviceIntent);
                 }
