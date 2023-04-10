@@ -23,15 +23,14 @@ public class BaseService extends Service {
     private static final int MESSAGE_RESTART_PLAYER = 100;
 
     protected Context mContext;
-    private String toastMsg = "";
-    private AlarmThread alarmThread;
-    long intervalTime = 0;
-    long nextTime = 0;
-    long time1 = 0;
-    long time2 = 0;
-    long dur1 = 0;
-    long dur2 = 0;
-    boolean running = true;
+    protected ThreadBase thread;
+    protected long intervalTime = 0;
+    protected long nextTime = 0;
+    protected long time1 = 0;
+    protected long time2 = 0;
+    protected long dur1 = 0;
+    protected long dur2 = 0;
+    protected boolean running = true;
 
 
     public BaseService() {
@@ -44,11 +43,6 @@ public class BaseService extends Service {
 
     protected void startThread()
     {
-        try {
-            alarmThread = new AlarmThread();
-            alarmThread.start();
-        } catch (Exception e) {
-        }
     }
 
     @Override
@@ -88,9 +82,9 @@ public class BaseService extends Service {
 
 
 
-    public class AlarmThread extends Thread
+    public class ThreadBase extends Thread
     {
-        private long updateTime(Map<String, UsageStats> appMap, long currentTime, String key) {
+        protected long updateTime(Map<String, UsageStats> appMap, long currentTime, String key) {
             try {
                 if (appMap.containsKey(key)) {
                     UsageStats usageStats = appMap.get(key);

@@ -3,10 +3,13 @@ package com.sign.watchdog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.usage.UsageStats;
 import android.content.Context;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
+
+import java.util.Map;
 
 
 public class MainServiceAdz extends BaseService {
@@ -32,4 +35,33 @@ public class MainServiceAdz extends BaseService {
         } catch (Exception e) {
         }
     }
+
+    protected void startThread()
+    {
+        try {
+            thread = new ThreadAdz();
+            thread.start();
+        } catch (Exception e) {
+        }
+    }
+
+    public class ThreadAdz extends BaseService.ThreadBase {
+
+        @Override
+        protected long updateTime(Map<String, UsageStats> appMap, long currentTime, String key) {
+            try {
+                if (appMap.containsKey(key)) {
+                    UsageStats usageStats = appMap.get(key);
+                    if (usageStats != null) {
+                        return (currentTime - usageStats.getLastTimeUsed()) / 1000;
+                    }
+                }
+            } catch (Exception e) {
+
+            }
+            return 0;
+        }
+    }
 }
+
+
