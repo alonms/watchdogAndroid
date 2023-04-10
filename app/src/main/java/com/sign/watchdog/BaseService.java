@@ -112,9 +112,9 @@ public class BaseService extends Service {
 
                 Map<String, UsageStats> appMap = usm.queryAndAggregateUsageStats(0, currentTime);
 
-                long t1 = updateTime(appMap,currentTime, "com.android.chrome"); // ADZ
-                long t2 = updateTime(appMap,currentTime, "com.sec.android.app.sbrowser"); // S21
-                time1 = Math.max(t1, t2);
+                time1 = updateTime(appMap,currentTime, "com.android.chrome"); // ADZ
+                //long t2 = updateTime(appMap,currentTime, "com.sec.android.app.sbrowser"); // S21
+                //time1 = Math.max(t1, t2);
             } catch (Exception e) {
                 Log.e("Watchdog", e.getMessage());
             }
