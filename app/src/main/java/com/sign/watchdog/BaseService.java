@@ -135,8 +135,8 @@ public class BaseService extends Service {
             while (true) {
                 try {
                     Log.d("Watchdog", "time1="+String.valueOf(time1)+" time2="+String.valueOf(time2));
-                    msg1 = "time1="+String.valueOf(time1)+" time2="+String.valueOf(time2);
-                    mMessageHandler.sendEmptyMessage(MESSAGE_TOAST);
+                    //msg1 = "time1="+String.valueOf(time1)+" time2="+String.valueOf(time2);
+                    //mMessageHandler.sendEmptyMessage(MESSAGE_TOAST);
 
                     if (time1 < time2) {
                         mMessageHandler.sendEmptyMessage(MESSAGE_RESTART_PLAYER);
