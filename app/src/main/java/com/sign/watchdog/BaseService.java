@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
@@ -21,6 +22,7 @@ import java.util.Map;
 
 public class BaseService extends Service {
     private static final int MESSAGE_RESTART_PLAYER = 100;
+    private static final int MESSAGE_TOAST = 101;
 
     protected Context mContext;
     protected ThreadBase thread;
@@ -31,6 +33,7 @@ public class BaseService extends Service {
     protected long dur1 = 0;
     protected long dur2 = 0;
     protected boolean running = true;
+    protected CharSequence msg1;
 
 
     public BaseService() {
@@ -73,6 +76,10 @@ public class BaseService extends Service {
             switch (msg.what) {
                 case MESSAGE_RESTART_PLAYER:
                     restartPlayer();
+                    break;
+
+                case MESSAGE_TOAST:
+                    Toast.makeText(mContext, msg1, Toast.LENGTH_SHORT).show();
                     break;
             }
             super.handleMessage(msg);
@@ -128,6 +135,9 @@ public class BaseService extends Service {
             while (true) {
                 try {
                     Log.d("Watchdog", "time1="+String.valueOf(time1)+" time2="+String.valueOf(time2));
+                    msg1 = "time1="+String.valueOf(time1)+" time2="+String.valueOf(time2);
+                    mMessageHandler.sendEmptyMessage(MESSAGE_TOAST);
+
                     if (time1 < time2) {
                         mMessageHandler.sendEmptyMessage(MESSAGE_RESTART_PLAYER);
                     }
