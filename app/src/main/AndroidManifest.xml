@@ -40,11 +40,11 @@
         </receiver>
 
         <service
-            android:name="com.sign.watchdog.ForegroundService">
+            android:name="com.sign.watchdog.MainServiceAdz">
         </service>
 
         <service
-            android:name="com.sign.watchdog.MainService">
+            android:name="com.sign.watchdog.MainServiceLatest">
         </service>
 
 

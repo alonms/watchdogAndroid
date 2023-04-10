@@ -9,8 +9,8 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 
 
-public class ForegroundService extends BaseService {
-    public ForegroundService() {
+public class MainServiceAdz extends BaseService {
+    public MainServiceAdz() {
         super();
     }
 
@@ -19,7 +19,7 @@ public class ForegroundService extends BaseService {
     {
         try {
             Log.d("Watchdog", "ForegroundService");
-            mContext = ForegroundService.this;
+            mContext = MainServiceAdz.this;
             String CHANNEL_ID = "my_channel_01";
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID,"title", NotificationManager.IMPORTANCE_DEFAULT);
             ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
