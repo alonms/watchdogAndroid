@@ -14,8 +14,7 @@ public class MainServiceLatest extends BaseService {
     {
         try {
             Log.d("Watchdog", "MainService");
-            mContext = MainServiceLatest.this;
-            startThread();
+            startThread(MainServiceLatest.this);
         } catch (Exception e) {
         }
     }

@@ -22,7 +22,6 @@ public class MainServiceAdz extends BaseService {
     {
         try {
             Log.d("Watchdog", "ForegroundService");
-            mContext = MainServiceAdz.this;
             String CHANNEL_ID = "my_channel_01";
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID,"title", NotificationManager.IMPORTANCE_DEFAULT);
             ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
@@ -31,7 +30,7 @@ public class MainServiceAdz extends BaseService {
                     .setContentText("").build();
             startForeground(1, notification);
 
-            startThread();
+            startThread(MainServiceAdz.this);
         } catch (Exception e) {
         }
     }

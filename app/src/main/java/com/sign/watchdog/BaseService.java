@@ -15,7 +15,6 @@ public class BaseService extends Service {
     private static final int MESSAGE_RESTART_PLAYER = 100;
     private static final int MESSAGE_TOAST = 101;
 
-    protected Context mContext;
     protected CharSequence msg1;
 
 
@@ -28,16 +27,10 @@ public class BaseService extends Service {
         return null;
     }
 
-    protected void startThread()
+    protected void startThread(Context context)
     {
-        WatchdogWebSocket wsServer = new WatchdogWebSocket();
+        WatchdogWebSocket wsServer = new WatchdogWebSocket(context);
         wsServer.start();
-        try {
-            Thread.sleep(1000);
-            restartPlayer();
-        } catch (Exception e) {
-
-        }
     }
 
     @Override
@@ -45,37 +38,4 @@ public class BaseService extends Service {
     {
         return START_STICKY;
     }
-
-
-    private void restartPlayer() {
-        try {
-            Log.d("Watchdog", "restartPlayer");
-            Intent intent2 = new Intent();
-            intent2.setAction(Intent.ACTION_VIEW);
-            intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            intent2.setData(Uri.parse("https://galaxy.signage.me/installplayer/"));
-            startActivity(intent2);
-        } catch (Exception e) {
-            Log.e("Watchdog", e.getMessage());
-        }
-
-    }
-
-
-    public Handler mMessageHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-
-            switch (msg.what) {
-                case MESSAGE_RESTART_PLAYER:
-                    restartPlayer();
-                    break;
-
-                case MESSAGE_TOAST:
-                    Toast.makeText(mContext, msg1, Toast.LENGTH_SHORT).show();
-                    break;
-            }
-            super.handleMessage(msg);
-        }
-    };
 }
