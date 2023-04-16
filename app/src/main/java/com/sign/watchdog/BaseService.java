@@ -61,6 +61,7 @@ public class BaseService extends Service {
             intent2.setAction(Intent.ACTION_VIEW);
             intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             intent2.setData(Uri.parse("https://galaxy.signage.me/installplayer/"));
+            //intent2.setData(Uri.parse("https://dev.signage.me/installplayer/"));
             startActivity(intent2);
         } catch (Exception e) {
             Log.e("Watchdog", e.getMessage());
@@ -124,12 +125,17 @@ public class BaseService extends Service {
         public void run()
         {
             Log.d("Watchdog", "Thread started");
+
             try {
                 sleep(5000);
+                WatchdogWebSocket wsServer = new WatchdogWebSocket();
+                wsServer.start();
+
+                sleep(20000);
                 mMessageHandler.sendEmptyMessage(MESSAGE_RESTART_PLAYER);
                 sleep(5000);
             } catch (Exception e) {
-
+                Log.e("WatchdogWebSocket", e.getMessage());
             }
 
             while (true) {
