@@ -37,6 +37,7 @@ public class WatchdogWebSocket extends WebSocketServer {
     @Override
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
         Log.d("WebSocketServer", "onClose");
+        restartPlayer();
     }
 
     @Override
