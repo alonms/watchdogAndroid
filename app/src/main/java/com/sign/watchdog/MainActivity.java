@@ -85,6 +85,12 @@ public class MainActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d("MainActivity", "onCreate");
+
+        WatchdogWebSocket wsServer = new WatchdogWebSocket();
+        wsServer.start();
+
+
+
         SharedPreferences userDetails = getSharedPreferences("userdetails", MODE_PRIVATE);
         int rebootsPerDay = userDetails.getInt("rebootsPerDay", 1);
         RadioGroup radioGroup = findViewById(R.id.radioGroup);
