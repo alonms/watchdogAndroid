@@ -42,7 +42,7 @@ public class WatchdogWebSocket extends WebSocketServer {
 
     @Override
     public void onMessage(WebSocket conn, String message) {
-        Log.d("WebSocketServer", "onMessage");
+        Log.d("WebSocketServer", "onMessage=" + message);
     }
 
     @Override
