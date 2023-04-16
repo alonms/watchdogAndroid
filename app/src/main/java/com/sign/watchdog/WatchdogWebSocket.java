@@ -9,11 +9,13 @@ import android.util.Log;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
+import org.json.JSONObject;
 
 import java.net.InetSocketAddress;
 
 public class WatchdogWebSocket extends WebSocketServer {
     Context mContext;
+    Boolean normalExit = false;
 
     public WatchdogWebSocket(Context context) {
         super(new InetSocketAddress(5555));
@@ -37,12 +39,26 @@ public class WatchdogWebSocket extends WebSocketServer {
     @Override
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
         Log.d("WebSocketServer", "onClose");
-        restartPlayer();
+        if (normalExit==false) {
+            restartPlayer();
+        }
     }
 
     @Override
     public void onMessage(WebSocket conn, String message) {
-        Log.d("WebSocketServer", "onMessage=" + message);
+        try {
+            Log.d("WebSocketServer", "onMessage=" + message);
+            JSONObject json = new JSONObject(message);
+            String command = json.getString("command");
+            Log.d("WebSocketServer", "onMessage=" + command);
+            if (command.equals("close")) {
+                normalExit = true;
+                Log.d("WebSocketServer", "System.exit");
+            }
+
+        } catch (Exception e) {
+
+        }
     }
 
     @Override
