@@ -4,6 +4,8 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import org.java_websocket.WebSocket;
@@ -13,7 +15,9 @@ import org.json.JSONObject;
 
 import java.net.InetSocketAddress;
 
+
 public class WatchdogWebSocket extends WebSocketServer {
+    public static int MESSAGE_RESTART_PLAYER = 0x0100;
     Context mContext;
     Boolean normalExit = false;
 
@@ -108,4 +112,34 @@ public class WatchdogWebSocket extends WebSocketServer {
 
     }
 
+
+    public Handler mMessageHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+
+            switch (msg.what) {
+                case MESSAGE_RESTART_PLAYER:
+                    restartPlayer();
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+    };
+
+
+    public class ThreadBase extends Thread
+    {
+        public void run()
+        {
+            Log.d("Watchdog", "Thread started");
+            while (true) {
+                try {
+                    mMessageHandler.sendEmptyMessage(MESSAGE_RESTART_PLAYER);
+                    sleep(5000);
+                } catch (Exception e) {
+
+                }
+            }
+        }
+    }
 }
