@@ -40,7 +40,7 @@ public class WatchdogWebSocket extends WebSocketServer {
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
         Log.d("WebSocketServer", "onClose");
         if (normalExit==false) {
-            restartPlayer();
+            //??? restartPlayer();
         }
     }
 
@@ -52,17 +52,18 @@ public class WatchdogWebSocket extends WebSocketServer {
             JSONObject result;
             String command = receivedMessage.getString("command");
             Log.d("WebSocketServer", "onMessage=" + command);
-            if (command.equals("close")) {
-                normalExit = true;
-                Log.d("WebSocketServer", "System.exit");
-            } else if (command.equals("start")) {
+            if (command.equals("start")) {
                 JSONObject data = new JSONObject();
                 data.put("extension", "1.6.0");
                 data.put("native", "1.6.0");
-                result = getResult(receivedMessage, data);
+                result = getResult(receivedMessage, data.toString());
                 conn.send(result.toString());
-            }
+            } else if (command.equals("ping")) {
 
+            } else if (command.equals("close")) {
+                normalExit = true;
+                Log.d("WebSocketServer", "System.exit");
+            }
         } catch (Exception e) {
 
         }
@@ -74,7 +75,7 @@ public class WatchdogWebSocket extends WebSocketServer {
     }
 
 
-    private static JSONObject getResult(JSONObject message, JSONObject data)
+    private static JSONObject getResult(JSONObject message, String data)
     {
         try {
             JSONObject result = new JSONObject();
