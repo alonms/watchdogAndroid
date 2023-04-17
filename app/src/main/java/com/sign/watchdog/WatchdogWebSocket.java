@@ -37,7 +37,7 @@ public class WatchdogWebSocket extends WebSocketServer {
         Log.d("WebSocketServer", "onStart");
         watchdogThread = new WatchdogThread();
         watchdogThread.start();
-        //??? restartPlayer();
+        restartPlayer();
     }
 
 
@@ -75,6 +75,7 @@ public class WatchdogWebSocket extends WebSocketServer {
             } else if (command.equals("close")) {
                 Log.d("WebSocketServer", "normalExit");
                 keepPlayer = false;
+                watchdogThread = null;
                 result = getResult(receivedMessage, "closed");
                 conn.send(result.toString());
             }
