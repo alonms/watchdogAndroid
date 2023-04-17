@@ -59,7 +59,11 @@ public class WatchdogWebSocket extends WebSocketServer {
                 result = getResult(receivedMessage, data.toString());
                 conn.send(result.toString());
             } else if (command.equals("ping")) {
-
+                Log.d("WebSocketServer", "ping1");
+                result = getResult(receivedMessage, "pong");
+                Log.d("WebSocketServer", "ping2");
+                conn.send(result.toString());
+                Log.d("WebSocketServer", "ping3");
             } else if (command.equals("close")) {
                 normalExit = true;
                 Log.d("WebSocketServer", "System.exit");
