@@ -18,8 +18,12 @@ import java.net.InetSocketAddress;
 
 public class WatchdogWebSocket extends WebSocketServer {
     private static final int MESSAGE_RESTART_PLAYER = 100;
+
+
     Context mContext;
-    Boolean normalExit = false;
+    WatchdogThread watchdogThread = null;
+    Boolean keepPlayer = true;
+    int count = 0;
 
     public WatchdogWebSocket(Context context) {
         super(new InetSocketAddress(5555));
@@ -31,6 +35,8 @@ public class WatchdogWebSocket extends WebSocketServer {
     @Override
     public void onStart() {
         Log.d("WebSocketServer", "onStart");
+        watchdogThread = new WatchdogThread();
+        watchdogThread.start();
         //??? restartPlayer();
     }
 
@@ -43,7 +49,7 @@ public class WatchdogWebSocket extends WebSocketServer {
     @Override
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
         Log.d("WebSocketServer", "onClose");
-        if (normalExit==false) {
+        if (keepPlayer) {
             //??? restartPlayer();
         }
     }
@@ -63,11 +69,12 @@ public class WatchdogWebSocket extends WebSocketServer {
                 result = getResult(receivedMessage, data.toString());
                 conn.send(result.toString());
             } else if (command.equals("ping")) {
+                count = 0;
                 result = getResult(receivedMessage, "pong");
                 conn.send(result.toString());
             } else if (command.equals("close")) {
                 Log.d("WebSocketServer", "normalExit");
-                normalExit = true;
+                keepPlayer = false;
                 result = getResult(receivedMessage, "closed");
                 conn.send(result.toString());
             }
@@ -127,18 +134,32 @@ public class WatchdogWebSocket extends WebSocketServer {
     };
 
 
-    public class ThreadBase extends Thread
+    public class WatchdogThread extends Thread
     {
         public void run()
         {
-            Log.d("Watchdog", "Thread started");
-            while (true) {
-                try {
-                    mMessageHandler.sendEmptyMessage(MESSAGE_RESTART_PLAYER);
-                    sleep(5000);
-                } catch (Exception e) {
-
+            try {
+                Log.d("Watchdog", "Thread started");
+                while (watchdogThread != null) {
+                    sleep(1000);
+                    count++;
+                    Log.d("Watchdog", "count=" + String.valueOf(count));
+                    if (count > 60) {
+                        Log.d("Watchdog", "no pings!!!");
+                        watchdogThread = null;
+                        break;
+                    }
                 }
+
+                sleep(5000);
+                if (keepPlayer)
+                {
+                    mMessageHandler.sendEmptyMessage(MESSAGE_RESTART_PLAYER);
+                    sleep(10000);
+                }
+                System.exit(0);
+            } catch (Exception e) {
+
             }
         }
     }
