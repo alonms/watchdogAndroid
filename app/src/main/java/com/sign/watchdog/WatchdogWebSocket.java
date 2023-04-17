@@ -27,7 +27,7 @@ public class WatchdogWebSocket extends WebSocketServer {
     @Override
     public void onStart() {
         Log.d("WebSocketServer", "onStart");
-        restartPlayer();
+        //??? restartPlayer();
     }
 
 
@@ -48,12 +48,19 @@ public class WatchdogWebSocket extends WebSocketServer {
     public void onMessage(WebSocket conn, String message) {
         try {
             Log.d("WebSocketServer", "onMessage=" + message);
-            JSONObject json = new JSONObject(message);
-            String command = json.getString("command");
+            JSONObject receivedMessage = new JSONObject(message);
+            JSONObject result;
+            String command = receivedMessage.getString("command");
             Log.d("WebSocketServer", "onMessage=" + command);
             if (command.equals("close")) {
                 normalExit = true;
                 Log.d("WebSocketServer", "System.exit");
+            } else if (command.equals("start")) {
+                JSONObject data = new JSONObject();
+                data.put("extension", "1.6.0");
+                data.put("native", "1.6.0");
+                result = getResult(receivedMessage, data);
+                conn.send(result.toString());
             }
 
         } catch (Exception e) {
@@ -64,6 +71,21 @@ public class WatchdogWebSocket extends WebSocketServer {
     @Override
     public void onError(WebSocket conn, Exception ex) {
         Log.d("WebSocketServer", "onError " + ex.getMessage());
+    }
+
+
+    private static JSONObject getResult(JSONObject message, JSONObject data)
+    {
+        try {
+            JSONObject result = new JSONObject();
+            result.put("source", "signPlayerWatchdog");
+            result.put("messageId", message.getString("messageId"));
+            result.put("result", data);
+            return result;
+        }
+        catch (Exception e) {
+            return null;
+        }
     }
 
 
