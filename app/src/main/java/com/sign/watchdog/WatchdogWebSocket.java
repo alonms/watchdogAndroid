@@ -17,7 +17,7 @@ import java.net.InetSocketAddress;
 
 
 public class WatchdogWebSocket extends WebSocketServer {
-    public static int MESSAGE_RESTART_PLAYER = 0x0100;
+    private static final int MESSAGE_RESTART_PLAYER = 100;
     Context mContext;
     Boolean normalExit = false;
 
