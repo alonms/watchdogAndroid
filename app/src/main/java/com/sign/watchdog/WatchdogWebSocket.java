@@ -22,7 +22,7 @@ public class WatchdogWebSocket extends WebSocketServer {
 
     Context mContext;
     WatchdogThread watchdogThread = null;
-    Boolean keepPlayer = true;
+    Boolean watchdogEnabled = false;
     int count = 0;
 
     public WatchdogWebSocket(Context context) {
@@ -44,14 +44,13 @@ public class WatchdogWebSocket extends WebSocketServer {
     @Override
     public void onOpen(WebSocket conn, ClientHandshake handshake) {
         Log.d("WebSocketServer", "onOpen");
+        count = 0;
+        watchdogEnabled = true;
     }
 
     @Override
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
         Log.d("WebSocketServer", "onClose");
-        if (keepPlayer) {
-            //??? restartPlayer();
-        }
     }
 
     @Override
@@ -74,8 +73,7 @@ public class WatchdogWebSocket extends WebSocketServer {
                 conn.send(result.toString());
             } else if (command.equals("close")) {
                 Log.d("WebSocketServer", "normalExit");
-                keepPlayer = false;
-                watchdogThread = null;
+                watchdogEnabled = false;
                 result = getResult(receivedMessage, "closed");
                 conn.send(result.toString());
             }
@@ -141,27 +139,22 @@ public class WatchdogWebSocket extends WebSocketServer {
         {
             try {
                 Log.d("Watchdog", "Thread started");
-                while (watchdogThread != null) {
+                while (true) {
                     sleep(1000);
-                    count++;
-                    Log.d("Watchdog", "count=" + String.valueOf(count));
-                    if (count > 60) {
-                        Log.d("Watchdog", "no pings!!!");
-                        watchdogThread = null;
-                        break;
+                    if (watchdogEnabled) {
+                        count++;
+                        Log.d("Watchdog", "count=" + String.valueOf(count));
+                        if (count > 60) {
+                            Log.d("Watchdog", "no pings!!!");
+                            mMessageHandler.sendEmptyMessage(MESSAGE_RESTART_PLAYER);
+                            sleep(10000);
+                        }
                     }
                 }
-
-                sleep(5000);
-                if (keepPlayer)
-                {
-                    mMessageHandler.sendEmptyMessage(MESSAGE_RESTART_PLAYER);
-                    sleep(10000);
-                }
-                System.exit(0);
             } catch (Exception e) {
 
             }
+            Log.d("Watchdog", "Thread end");
         }
     }
 }
