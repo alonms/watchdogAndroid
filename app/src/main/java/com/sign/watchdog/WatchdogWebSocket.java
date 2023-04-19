@@ -109,8 +109,8 @@ public class WatchdogWebSocket extends WebSocketServer {
             Intent intent2 = new Intent();
             intent2.setAction(Intent.ACTION_VIEW);
             intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            //intent2.setData(Uri.parse("https://galaxy.signage.me/installplayer/"));
-            intent2.setData(Uri.parse("https://dev.signage.me/installplayer/"));
+            intent2.setData(Uri.parse("https://galaxy.signage.me/installplayer/"));
+            //intent2.setData(Uri.parse("https://dev.signage.me/installplayer/"));
             mContext.startActivity(intent2);
         } catch (Exception e) {
             Log.e("Watchdog", e.getMessage());
