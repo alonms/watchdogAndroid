@@ -54,32 +54,6 @@ public class MainActivity extends AppCompatActivity  {
     public static final int REQUEST_CODE = 1;
 
 
-    public void showRunningApps() {
-        try {
-            String str = "";
-            UsageStatsManager usm = (UsageStatsManager)this.getSystemService("usagestats");
-            long currentTime = System.currentTimeMillis();
-            List<UsageStats> appList = usm.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, 0, currentTime);
-            for(int i=0; i<appList.size(); i++) {
-                UsageStats usageStats = appList.get(i);
-                long t1 = (currentTime - usageStats.getLastTimeStamp()) / 1000;
-                long t2 = ( currentTime - usageStats.getLastTimeUsed()) / 1000;
-
-                if (t1 > 0 && t1 < 60 ) {
-                    str += usageStats.getPackageName() + " " + String.valueOf(t1)  + " " + String.valueOf(t2)  + "\n";
-
-                }
-            }
-            Log.d("WD", str);
-            //TextView msg = findViewById(R.id.textView2);
-            //msg.setText(str);
-
-        } catch (Exception e) {
-
-        }
-    }
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,7 +92,6 @@ public class MainActivity extends AppCompatActivity  {
         });
 
         requestDrawOverlays();
-        requestUsageStats();
     }
 
     private void requestDrawOverlays() {
@@ -143,17 +116,6 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
-    private void requestUsageStats() {
-        final UsageStatsManager mUsageStatsManager = (UsageStatsManager)this.getSystemService(Context.USAGE_STATS_SERVICE);
-        final long now = System.currentTimeMillis();
-        final List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, now - 1000 * 10, now);
-        boolean granted = (stats != null && !stats.isEmpty());
-        if (granted==false) {
-            Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
-            startActivity(intent);
-        }
-    }
-
     private void deploy() {
         String urlString = "https://galaxy.signage.me/deploy/deploy.html";
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlString));
@@ -164,40 +126,4 @@ public class MainActivity extends AppCompatActivity  {
         } catch (ActivityNotFoundException ex) {
         }
     }
-
-
-    private void updateLastTimeStamp() {
-        try {
-            UsageStatsManager usm = (UsageStatsManager)getSystemService("usagestats");
-            long currentTime = System.currentTimeMillis();
-            Map<String, UsageStats> appMap = usm.queryAndAggregateUsageStats(0, currentTime);
-            UsageStats usageStats = appMap.get("com.android.chrome");
-            if (usageStats!=null) {
-                long time1 = (currentTime - usageStats.getLastTimeUsed()) / 1000;
-                //long time2 = (currentTime - usageStats.getFirstTimeStamp()) / 1000;
-
-                long time2 = usageStats.getTotalTimeInForeground() / 1000;
-                Log.d("WD", String.valueOf(time2));
-            }
-        } catch (Exception e) {
-            Log.e("Watchdog", e.getMessage());
-        }
-    }
-
-    public class MyThread extends Thread
-    {
-        public void run()
-        {
-            while(true) {
-                updateLastTimeStamp();
-             try {
-                 sleep(1000);
-             } catch (Exception e) {
-
-             }
-
-            }
-        }
-    }
-
 }

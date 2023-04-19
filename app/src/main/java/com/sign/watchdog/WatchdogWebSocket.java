@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
@@ -18,12 +19,15 @@ import java.net.InetSocketAddress;
 
 public class WatchdogWebSocket extends WebSocketServer {
     private static final int MESSAGE_RESTART_PLAYER = 100;
+    private static final int MESSAGE_TOAST = 101;
+
 
 
     Context mContext;
     WatchdogThread watchdogThread = null;
     Boolean watchdogEnabled = false;
     int count = 0;
+    String toast = "";
 
     public WatchdogWebSocket(Context context) {
         super(new InetSocketAddress(5555));
@@ -35,6 +39,10 @@ public class WatchdogWebSocket extends WebSocketServer {
     @Override
     public void onStart() {
         Log.d("WebSocketServer", "onStart");
+
+        toast = "WebSocket onStart";
+        mMessageHandler.sendEmptyMessage(MESSAGE_TOAST);
+
         watchdogThread = new WatchdogThread();
         watchdogThread.start();
         restartPlayer();
@@ -44,6 +52,11 @@ public class WatchdogWebSocket extends WebSocketServer {
     @Override
     public void onOpen(WebSocket conn, ClientHandshake handshake) {
         Log.d("WebSocketServer", "onOpen");
+
+        toast = "WebSocket onOpen";
+        mMessageHandler.sendEmptyMessage(MESSAGE_TOAST);
+
+
         count = 0;
         watchdogEnabled = true;
     }
@@ -126,6 +139,9 @@ public class WatchdogWebSocket extends WebSocketServer {
             switch (msg.what) {
                 case MESSAGE_RESTART_PLAYER:
                     restartPlayer();
+                    break;
+                case MESSAGE_TOAST:
+                    Toast.makeText(mContext, toast, Toast.LENGTH_LONG).show();
                     break;
             }
             super.handleMessage(msg);
