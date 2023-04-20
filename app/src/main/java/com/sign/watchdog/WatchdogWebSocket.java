@@ -30,7 +30,7 @@ public class WatchdogWebSocket extends WebSocketServer {
     String toast = "";
 
     public WatchdogWebSocket(Context context) {
-        super(new InetSocketAddress(5555));
+        super(new InetSocketAddress(8090));
         Log.d("WebSocketServer", "WatchdogWebSocket");
         mContext = context;
         setReuseAddr(true);
