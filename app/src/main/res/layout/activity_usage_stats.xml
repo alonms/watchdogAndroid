@@ -10,21 +10,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_margin="24dp">
-        <TextView
-            android:id="@+id/msg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="signPlayer Watchdog"
-            android:textSize="20sp"
-            android:height="80dp"
-            android:textStyle="bold"/>
-
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="* Reboot the Device to activate the Watchdog"/>
-    </LinearLayout>
+        android:layout_margin="24dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

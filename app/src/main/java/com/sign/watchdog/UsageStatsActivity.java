@@ -3,6 +3,9 @@ package com.sign.watchdog;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
@@ -32,19 +35,29 @@ public class UsageStatsActivity extends AppCompatActivity  {
 
 
     private void requestUsageStats() {
+        Intent drawOverlaysIntent = new Intent(this, DrawOverlaysActivity.class);
+        PendingIntent drawOverlaysPendingIntent = (PendingIntent.getActivity(this, 0, drawOverlaysIntent, PendingIntent.FLAG_IMMUTABLE));
         if (!hasUsageStats()) {
             ActivityResultLauncher<Intent> ativityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(), result -> {
-                    TextView msg = findViewById(R.id.textView2);
                     if (hasUsageStats()) {
+                        try {
+                            long currentTime = System.currentTimeMillis() + 5000;
+                            AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+                            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, currentTime, AlarmManager.INTERVAL_DAY, drawOverlaysPendingIntent);
+                        } catch (Exception e) {
 
-                    } else {
-                        msg.setText("signWatchdog is not configure properly, please restart the app and then select \"Usage access\" for signWatchdog");
-                        msg.setTextColor(Color.RED);
+                        }
                     }
                 });
             Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
             ativityResultLauncher.launch(intent);
+        } else {
+            try {
+                drawOverlaysPendingIntent.send();
+            } catch (Exception e) {
+
+            }
         }
     }
 }
