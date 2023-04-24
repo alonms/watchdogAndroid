@@ -30,9 +30,13 @@ public class BaseService extends Service {
     boolean running = true;
 
 
-
-
     public BaseService() {
+    }
+
+    @Override
+    public void onCreate() {
+        alarmThread = new AlarmThread();
+        alarmThread.start();
     }
 
     @Override
