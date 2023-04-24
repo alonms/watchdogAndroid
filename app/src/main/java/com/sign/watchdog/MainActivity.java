@@ -94,6 +94,17 @@ public class MainActivity extends AppCompatActivity  {
         requestDrawOverlays();
     }
 
+    private void requestUsageStats() {
+        final UsageStatsManager mUsageStatsManager = (UsageStatsManager)this.getSystemService(Context.USAGE_STATS_SERVICE);
+        final long now = System.currentTimeMillis();
+        final List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, now - 1000 * 10, now);
+        boolean granted = (stats != null && !stats.isEmpty());
+        if (granted==false) {
+            Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+            startActivity(intent);
+        }
+    }
+
     private void requestDrawOverlays() {
         if (!Settings.canDrawOverlays(getApplicationContext())) {
             ActivityResultLauncher<Intent> ativityResultLauncher = registerForActivityResult(
@@ -115,6 +126,7 @@ public class MainActivity extends AppCompatActivity  {
             ativityResultLauncher.launch(intent);
         }
     }
+
 
     private void deploy() {
         String urlString = "https://galaxy.signage.me/deploy/deploy.html";
