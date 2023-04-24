@@ -12,6 +12,7 @@ public class MainServiceLatest extends BaseService {
     @Override
     public void onCreate()
     {
+        super.onCreate();
         try {
             Log.d("Watchdog", "MainService");
             startThread(MainServiceLatest.this);
