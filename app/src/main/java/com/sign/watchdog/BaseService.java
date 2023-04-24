@@ -11,11 +11,6 @@ import java.util.Map;
 
 
 public class BaseService extends Service {
-    private static final int MESSAGE_RESTART_PLAYER = 100;
-    private static final int MESSAGE_TOAST = 101;
-
-    protected CharSequence msg1;
-
     public BaseService() {
     }
 
