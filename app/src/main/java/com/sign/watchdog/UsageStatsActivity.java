@@ -40,6 +40,8 @@ public class UsageStatsActivity extends AppCompatActivity  {
         if (!hasUsageStats()) {
             ActivityResultLauncher<Intent> ativityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(), result -> {
+                    TextView msg = findViewById(R.id.msg0);
+
                     if (hasUsageStats()) {
                         try {
                             Intent drawOverlaysIntent = new Intent(this, DrawOverlaysActivity.class);
@@ -58,6 +60,9 @@ public class UsageStatsActivity extends AppCompatActivity  {
                         } catch (Exception e) {
 
                         }
+                    } else {
+                        msg.setText("signWatchdog is not configure properly, please restart the app and then select \"Usage access\" for signWatchdog");
+                        msg.setTextColor(Color.RED);
                     }
                 });
             Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);

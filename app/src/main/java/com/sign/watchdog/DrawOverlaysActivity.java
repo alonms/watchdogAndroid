@@ -38,7 +38,7 @@ public class DrawOverlaysActivity extends AppCompatActivity  {
         if (!Settings.canDrawOverlays(getApplicationContext())) {
             ActivityResultLauncher<Intent> ativityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(), result -> {
-                    TextView msg = findViewById(R.id.textView2);
+                    TextView msg = findViewById(R.id.msg1);
 
                     if (Settings.canDrawOverlays(getApplicationContext())) {
                         Intent settingsIntent = new Intent(this, SettingsActivity.class);
