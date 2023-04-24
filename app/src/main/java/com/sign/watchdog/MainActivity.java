@@ -91,7 +91,8 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
 
-        requestDrawOverlays();
+        requestUsageStats();
+        //requestDrawOverlays();
     }
 
     private void requestUsageStats() {
