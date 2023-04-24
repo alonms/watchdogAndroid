@@ -52,7 +52,7 @@ import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity  {
     public static final int REQUEST_CODE = 1;
-
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,17 +92,39 @@ public class MainActivity extends AppCompatActivity  {
         });
 
         requestUsageStats();
-        //requestDrawOverlays();
+        //
     }
 
-    private void requestUsageStats() {
-        final UsageStatsManager mUsageStatsManager = (UsageStatsManager)this.getSystemService(Context.USAGE_STATS_SERVICE);
+    private boolean hasUsageStats() {
         final long now = System.currentTimeMillis();
+        final UsageStatsManager mUsageStatsManager = (UsageStatsManager)this.getSystemService(Context.USAGE_STATS_SERVICE);
         final List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, now - 1000 * 10, now);
-        boolean granted = (stats != null && !stats.isEmpty());
-        if (granted==false) {
+        return (stats != null && !stats.isEmpty());
+    }
+
+
+    private void requestUsageStats() {
+        if (!hasUsageStats()) {
+            ActivityResultLauncher<Intent> ativityResultLauncher = registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    new ActivityResultCallback<ActivityResult>() {
+                        @Override
+                        public void onActivityResult(ActivityResult result) {
+                            TextView msg = findViewById(R.id.textView2);
+                            if (hasUsageStats()) {
+
+                            } else {
+                                msg.setText("signWatchdog is not configure properly, please restart the app and then select \"Usage access\" for signWatchdog");
+                                msg.setTextColor(Color.RED);
+                            }
+                        }
+                    });
+
+
             Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
-            startActivity(intent);
+            ativityResultLauncher.launch(intent);
+        } else {
+            requestDrawOverlays();
         }
     }
 
