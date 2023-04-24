@@ -5,13 +5,8 @@ import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
-
 import java.util.Map;
 
 
@@ -20,6 +15,21 @@ public class BaseService extends Service {
     private static final int MESSAGE_TOAST = 101;
 
     protected CharSequence msg1;
+
+
+
+    private Context mContext;
+    private String toastMsg = "";
+    private AlarmThread alarmThread;
+    long intervalTime = 0;
+    long nextTime = 0;
+    long time1 = 0;
+    long time2 = 0;
+    long dur1 = 0;
+    long dur2 = 0;
+    boolean running = true;
+
+
 
 
     public BaseService() {
@@ -43,7 +53,7 @@ public class BaseService extends Service {
         return START_STICKY;
     }
 
-/*
+
 
     public class AlarmThread extends Thread
     {
@@ -93,5 +103,4 @@ public class BaseService extends Service {
         }
 
     }
-*/
 }
