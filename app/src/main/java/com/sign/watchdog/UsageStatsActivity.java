@@ -16,6 +16,8 @@ import android.provider.Settings;
 import android.util.Log;
 import android.widget.TextView;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class UsageStatsActivity extends AppCompatActivity  {
     @Override
@@ -42,9 +44,17 @@ public class UsageStatsActivity extends AppCompatActivity  {
                         try {
                             Intent drawOverlaysIntent = new Intent(this, DrawOverlaysActivity.class);
                             PendingIntent drawOverlaysPendingIntent = (PendingIntent.getActivity(this, 0, drawOverlaysIntent, PendingIntent.FLAG_IMMUTABLE));
-                            AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-                            long currentTime = System.currentTimeMillis();
-                            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, currentTime, AlarmManager.INTERVAL_DAY, drawOverlaysPendingIntent);
+
+                            new Timer().schedule(new TimerTask() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        drawOverlaysPendingIntent.send();
+                                    } catch (Exception e) {
+
+                                    }
+                                }
+                            }, 1000);
                         } catch (Exception e) {
 
                         }
