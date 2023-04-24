@@ -20,7 +20,6 @@ public class MainServiceAdz extends BaseService {
     @Override
     public void onCreate()
     {
-        super.onCreate();
         try {
             Log.d("Watchdog", "ForegroundService");
             String CHANNEL_ID = "my_channel_01";

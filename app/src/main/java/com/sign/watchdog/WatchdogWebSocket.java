@@ -1,6 +1,8 @@
 package com.sign.watchdog;
 
 import android.app.Service;
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -15,19 +17,21 @@ import org.java_websocket.server.WebSocketServer;
 import org.json.JSONObject;
 
 import java.net.InetSocketAddress;
+import java.util.Map;
 
 
 public class WatchdogWebSocket extends WebSocketServer {
     private static final int MESSAGE_RESTART_PLAYER = 100;
     private static final int MESSAGE_TOAST = 101;
 
-
-
     Context mContext;
     WatchdogThread watchdogThread = null;
     Boolean watchdogEnabled = false;
+    boolean checkLastTimeStamp = true;
     int count = 0;
     String toast = "";
+    long time1 = 0;
+    long time2 = 0;
 
     public WatchdogWebSocket(Context context) {
         super(new InetSocketAddress(8090));
@@ -52,13 +56,11 @@ public class WatchdogWebSocket extends WebSocketServer {
     @Override
     public void onOpen(WebSocket conn, ClientHandshake handshake) {
         Log.d("WebSocketServer", "onOpen");
-
         toast = "WebSocket onOpen";
         mMessageHandler.sendEmptyMessage(MESSAGE_TOAST);
-
-
         count = 0;
         watchdogEnabled = true;
+        checkLastTimeStamp = false;
     }
 
     @Override
@@ -151,13 +153,29 @@ public class WatchdogWebSocket extends WebSocketServer {
 
     public class WatchdogThread extends Thread
     {
+        private void updateLastTimeStamp() {
+            try {
+                UsageStatsManager usm = (UsageStatsManager)mContext.getSystemService("usagestats");
+                long currentTime = System.currentTimeMillis();
+                Map<String, UsageStats> appMap = usm.queryAndAggregateUsageStats(0, currentTime);
+                // UsageStats usageStats = appMap.get("com.sec.android.app.sbrowser");   // S21
+                UsageStats usageStats = appMap.get("com.android.chrome");
+                if (usageStats!=null) {
+                    //time1 = (currentTime - usageStats.getLastTimeStamp()) / 1000;
+                    time1 = (currentTime - usageStats.getLastTimeUsed()) / 1000;
+                }
+            } catch (Exception e) {
+                Log.e("Watchdog", e.getMessage());
+            }
+        }
+
         public void run()
         {
             try {
                 Log.d("Watchdog", "Thread started");
                 while (true) {
-                    sleep(1000);
                     if (watchdogEnabled) {
+                        sleep(1000);
                         count++;
                         Log.d("Watchdog", "count=" + String.valueOf(count));
                         if (count > 60) {
@@ -165,6 +183,16 @@ public class WatchdogWebSocket extends WebSocketServer {
                             mMessageHandler.sendEmptyMessage(MESSAGE_RESTART_PLAYER);
                             sleep(10000);
                         }
+                    }
+
+                    if (checkLastTimeStamp) {
+                        Log.d("Watchdog", "time1="+String.valueOf(time1)+" time2="+String.valueOf(time2));
+                        if (time1 < time2) {
+                            mMessageHandler.sendEmptyMessage(MESSAGE_RESTART_PLAYER);
+                        }
+                        time2 = time1;
+                        sleep(5000);
+                        updateLastTimeStamp();
                     }
                 }
             } catch (Exception e) {
