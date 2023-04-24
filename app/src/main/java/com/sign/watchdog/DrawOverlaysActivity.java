@@ -35,18 +35,35 @@ public class DrawOverlaysActivity extends AppCompatActivity  {
     private void requestDrawOverlays() {
         if (!Settings.canDrawOverlays(getApplicationContext())) {
             ActivityResultLauncher<Intent> ativityResultLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(), result -> {
-                TextView msg = findViewById(R.id.textView2);
+                    new ActivityResultContracts.StartActivityForResult(), result -> {
+                        TextView msg = findViewById(R.id.textView2);
 
-                if (Settings.canDrawOverlays(getApplicationContext())) {
+                        if (Settings.canDrawOverlays(getApplicationContext())) {
+                            try {
+                                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                                PendingIntent settingsIntentPendingIntent = (PendingIntent.getActivity(this, 0, settingsIntent, PendingIntent.FLAG_IMMUTABLE));
+                                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                                long currentTime = System.currentTimeMillis();
+                                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, currentTime, AlarmManager.INTERVAL_DAY, settingsIntentPendingIntent);
+                            } catch (Exception e) {
 
-                } else {
-                    msg.setText("signWatchdog is not configure properly, please restart the app and then select \"Appear on top\" for signWatchdog");
-                    msg.setTextColor(Color.RED);
-                }
-            });
+                            }
+                        } else {
+                            msg.setText("signWatchdog is not configure properly, please restart the app and then select \"Appear on top\" for signWatchdog");
+                            msg.setTextColor(Color.RED);
+                        }
+                    });
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
             ativityResultLauncher.launch(intent);
+
+        } else {
+            try {
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                PendingIntent settingsIntentPendingIntent = (PendingIntent.getActivity(this, 0, settingsIntent, PendingIntent.FLAG_IMMUTABLE));
+                settingsIntentPendingIntent.send();
+            } catch (Exception e) {
+
+            }
         }
     }
 }
