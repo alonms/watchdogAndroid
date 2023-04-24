@@ -38,11 +38,6 @@ public class WatchdogWebSocket extends WebSocketServer {
         Log.d("WebSocketServer", "WatchdogWebSocket");
         mContext = context;
         setReuseAddr(true);
-    }
-
-    @Override
-    public void onStart() {
-        Log.d("WebSocketServer", "onStart");
 
         toast = "WebSocket onStart";
         mMessageHandler.sendEmptyMessage(MESSAGE_TOAST);
@@ -50,6 +45,11 @@ public class WatchdogWebSocket extends WebSocketServer {
         watchdogThread = new WatchdogThread();
         watchdogThread.start();
         restartPlayer();
+    }
+
+    @Override
+    public void onStart() {
+        Log.d("WebSocketServer", "onStart");
     }
 
 
