@@ -35,15 +35,15 @@ public class UsageStatsActivity extends AppCompatActivity  {
 
 
     private void requestUsageStats() {
-        Intent drawOverlaysIntent = new Intent(this, DrawOverlaysActivity.class);
-        PendingIntent drawOverlaysPendingIntent = (PendingIntent.getActivity(this, 0, drawOverlaysIntent, PendingIntent.FLAG_IMMUTABLE));
         if (!hasUsageStats()) {
             ActivityResultLauncher<Intent> ativityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(), result -> {
                     if (hasUsageStats()) {
                         try {
-                            long currentTime = System.currentTimeMillis() + 5000;
+                            Intent drawOverlaysIntent = new Intent(this, DrawOverlaysActivity.class);
+                            PendingIntent drawOverlaysPendingIntent = (PendingIntent.getActivity(this, 0, drawOverlaysIntent, PendingIntent.FLAG_IMMUTABLE));
                             AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+                            long currentTime = System.currentTimeMillis();
                             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, currentTime, AlarmManager.INTERVAL_DAY, drawOverlaysPendingIntent);
                         } catch (Exception e) {
 
@@ -54,6 +54,8 @@ public class UsageStatsActivity extends AppCompatActivity  {
             ativityResultLauncher.launch(intent);
         } else {
             try {
+                Intent drawOverlaysIntent = new Intent(this, DrawOverlaysActivity.class);
+                PendingIntent drawOverlaysPendingIntent = (PendingIntent.getActivity(this, 0, drawOverlaysIntent, PendingIntent.FLAG_IMMUTABLE));
                 drawOverlaysPendingIntent.send();
             } catch (Exception e) {
 
