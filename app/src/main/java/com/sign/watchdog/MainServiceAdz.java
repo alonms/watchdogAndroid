@@ -3,13 +3,9 @@ package com.sign.watchdog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.usage.UsageStats;
 import android.content.Context;
 import android.util.Log;
-
 import androidx.core.app.NotificationCompat;
-
-import java.util.Map;
 
 
 public class MainServiceAdz extends BaseService {

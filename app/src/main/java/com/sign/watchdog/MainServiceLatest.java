@@ -1,6 +1,5 @@
 package com.sign.watchdog;
 
-
 import android.util.Log;
 
 
