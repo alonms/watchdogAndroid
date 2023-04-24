@@ -51,8 +51,12 @@ import java.util.TimeZone;
 import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity  {
-    public static final int REQUEST_CODE = 1;
-    private Context mContext;
+    final String[] PERMISSIONS = {
+            Manifest.permission.PACKAGE_USAGE_STATS
+    };
+
+    private ActivityResultContracts.RequestMultiplePermissions multiplePermissionsContract;
+    private ActivityResultLauncher<String[]> multiplePermissionLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +97,37 @@ public class MainActivity extends AppCompatActivity  {
 
         requestUsageStats();
         //
+        //multiplePermissionsContract = new ActivityResultContracts.RequestMultiplePermissions();
+        //multiplePermissionLauncher = registerForActivityResult(multiplePermissionsContract, isGranted -> {
+
+        //});
+
+        //askPermissions(multiplePermissionLauncher);
     }
+
+    private void askPermissions(ActivityResultLauncher<String[]> multiplePermissionLauncher) {
+        if (!hasPermissions(PERMISSIONS)) {
+            Log.d("PERMISSIONS", "Launching multiple contract permission launcher for ALL required permissions");
+            multiplePermissionLauncher.launch(PERMISSIONS);
+        } else {
+            Log.d("PERMISSIONS", "All permissions are already granted");
+        }
+    }
+
+    private boolean hasPermissions(String[] permissions) {
+        if (permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                    Log.d("PERMISSIONS", "Permission is not granted: " + permission);
+                    return false;
+                }
+                Log.d("PERMISSIONS", "Permission already granted: " + permission);
+            }
+            return true;
+        }
+        return false;
+    }
+
 
     private boolean hasUsageStats() {
         final long now = System.currentTimeMillis();
@@ -106,21 +140,15 @@ public class MainActivity extends AppCompatActivity  {
     private void requestUsageStats() {
         if (!hasUsageStats()) {
             ActivityResultLauncher<Intent> ativityResultLauncher = registerForActivityResult(
-                    new ActivityResultContracts.StartActivityForResult(),
-                    new ActivityResultCallback<ActivityResult>() {
-                        @Override
-                        public void onActivityResult(ActivityResult result) {
-                            TextView msg = findViewById(R.id.textView2);
-                            if (hasUsageStats()) {
+                new ActivityResultContracts.StartActivityForResult(), result -> {
+                    TextView msg = findViewById(R.id.textView2);
+                    if (hasUsageStats()) {
 
-                            } else {
-                                msg.setText("signWatchdog is not configure properly, please restart the app and then select \"Usage access\" for signWatchdog");
-                                msg.setTextColor(Color.RED);
-                            }
-                        }
-                    });
-
-
+                    } else {
+                        msg.setText("signWatchdog is not configure properly, please restart the app and then select \"Usage access\" for signWatchdog");
+                        msg.setTextColor(Color.RED);
+                    }
+                });
             Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
             ativityResultLauncher.launch(intent);
         } else {
@@ -131,20 +159,16 @@ public class MainActivity extends AppCompatActivity  {
     private void requestDrawOverlays() {
         if (!Settings.canDrawOverlays(getApplicationContext())) {
             ActivityResultLauncher<Intent> ativityResultLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult result) {
-                        TextView msg = findViewById(R.id.textView2);
+                new ActivityResultContracts.StartActivityForResult(), result -> {
+                TextView msg = findViewById(R.id.textView2);
 
-                        if (Settings.canDrawOverlays(getApplicationContext())) {
-                            deploy();
-                        } else {
-                            msg.setText("signWatchdog is not configure properly, please restart the app and then select \"Appear on top\" for signWatchdog");
-                            msg.setTextColor(Color.RED);
-                        }
-                    }
-                });
+                if (Settings.canDrawOverlays(getApplicationContext())) {
+                    deploy();
+                } else {
+                    msg.setText("signWatchdog is not configure properly, please restart the app and then select \"Appear on top\" for signWatchdog");
+                    msg.setTextColor(Color.RED);
+                }
+            });
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
             ativityResultLauncher.launch(intent);
         }
