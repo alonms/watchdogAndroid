@@ -78,8 +78,7 @@ public class WatchdogWebSocket extends WebSocketServer {
             Log.d("WebSocketServer", "onMessage=" + command);
             if (command.equals("start")) {
                 JSONObject data = new JSONObject();
-                data.put("extension", "1.6.0");
-                data.put("native", "1.6.0");
+                data.put("native", BuildConfig.VERSION_NAME);
                 result = getResult(receivedMessage, data.toString());
                 conn.send(result.toString());
             } else if (command.equals("ping")) {
