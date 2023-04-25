@@ -67,14 +67,14 @@
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="* Reboot the Device to activate the Watchdog"/>
+            android:text="* Close this App and Reboot the Device to activate the Watchdog"/>
 
         <Button
-            android:id="@+id/btnStart"
+            android:id="@+id/btnClose"
             android:textSize="20sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Start now" />
+            android:text="Close now" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

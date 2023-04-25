@@ -51,7 +51,7 @@ public class SettingsActivity extends AppCompatActivity  {
             }
         });
 
-        Button btnReboot = findViewById(R.id.btnStart);
+        Button btnReboot = findViewById(R.id.btnClose);
         btnReboot.setOnClickListener(new View.OnClickListener() {
             public void onClick(View var1) {
                 start();
