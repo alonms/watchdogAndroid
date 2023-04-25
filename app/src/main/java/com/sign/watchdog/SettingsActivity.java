@@ -1,25 +1,17 @@
 package com.sign.watchdog;
 
-import android.app.usage.UsageStats;
-import android.app.usage.UsageStatsManager;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.List;
 
 public class SettingsActivity extends AppCompatActivity  {
     @Override
@@ -58,6 +50,23 @@ public class SettingsActivity extends AppCompatActivity  {
                 editor.commit();
             }
         });
+
+        Button btnReboot = findViewById(R.id.btnStart);
+        btnReboot.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View var1) {
+                start();
+            }
+        });
+    }
+
+    public void start() {
+        try {
+
+
+            System.exit(0);
+        } catch (Exception e) {
+            Log.d("Watchdog", e.getMessage());
+        }
     }
 
 

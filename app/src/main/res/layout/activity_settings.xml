@@ -68,5 +68,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="* Reboot the Device to activate the Watchdog"/>
+
+        <Button
+            android:id="@+id/btnStart"
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Start now" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

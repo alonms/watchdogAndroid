@@ -52,6 +52,7 @@ public class UsageStatsActivity extends AppCompatActivity  {
                                 public void run() {
                                     try {
                                         drawOverlaysPendingIntent.send();
+                                        finish();
                                     } catch (Exception e) {
 
                                     }
@@ -72,6 +73,7 @@ public class UsageStatsActivity extends AppCompatActivity  {
                 Intent drawOverlaysIntent = new Intent(this, DrawOverlaysActivity.class);
                 PendingIntent drawOverlaysPendingIntent = (PendingIntent.getActivity(this, 0, drawOverlaysIntent, PendingIntent.FLAG_IMMUTABLE));
                 drawOverlaysPendingIntent.send();
+                finish();
             } catch (Exception e) {
 
             }

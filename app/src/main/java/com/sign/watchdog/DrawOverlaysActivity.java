@@ -49,6 +49,7 @@ public class DrawOverlaysActivity extends AppCompatActivity  {
                             public void run() {
                                 try {
                                     settingsIntentPendingIntent.send();
+                                    finish();
                                 } catch (Exception e) {
 
                                 }
@@ -67,6 +68,7 @@ public class DrawOverlaysActivity extends AppCompatActivity  {
                 Intent settingsIntent = new Intent(this, SettingsActivity.class);
                 PendingIntent settingsIntentPendingIntent = (PendingIntent.getActivity(this, 0, settingsIntent, PendingIntent.FLAG_IMMUTABLE));
                 settingsIntentPendingIntent.send();
+                finish();
             } catch (Exception e) {
 
             }
