@@ -46,8 +46,12 @@ public class BootDeviceReceiver extends BroadcastReceiver {
     }
 
     private void createRestartIntent(Context context) {
-        Intent serviceIntent = new Intent(context, RebootService.class);
-        restartPlayerIntent = (PendingIntent.getService(context, 0, serviceIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+        intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.setData(Uri.parse("https://galaxy.signage.me/installplayer/"));
+        //intent.setData(Uri.parse("https://dev.signage.me/installplayer/"));
+        restartPlayerIntent = (PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE));
     }
 
 
@@ -58,7 +62,7 @@ public class BootDeviceReceiver extends BroadcastReceiver {
             long rebootsPerDay = userDetails.getInt("rebootsPerDay", 1);
             if (rebootsPerDay>0) {
                 if (rebootsPerDay==4)
-                    rebootsPerDay = 24 * 12;  //??? *12
+                    rebootsPerDay = 24;
                 long intervalTime = AlarmManager.INTERVAL_DAY / rebootsPerDay;
                 long currentTime = System.currentTimeMillis();
                 Calendar calendar = Calendar.getInstance();

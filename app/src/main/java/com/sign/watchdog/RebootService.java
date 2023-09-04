@@ -21,19 +21,30 @@ public class RebootService extends Service {
     public void onCreate()
     {
         super.onCreate();
+        restartPlayer();
+        /*
         try {
             Log.d("Watchdog", "Reboot device");
             Runtime.getRuntime().exec("reboot");
         } catch (Exception e) {
             restartPlayer();
         }
+
+         */
     }
 
     private void restartPlayer() {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        intent.setData(Uri.parse("https://galaxy.signage.me/installplayer/"));
-        startActivity(intent);
+        try {
+            Log.d("Watchdog", "restartPlayer");
+            Intent intent2 = new Intent();
+            intent2.setAction(Intent.ACTION_VIEW);
+            intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            intent2.setData(Uri.parse("https://galaxy.signage.me/installplayer/"));
+            //intent2.setData(Uri.parse("https://dev.signage.me/installplayer/"));
+            startActivity(intent2);
+        } catch (Exception e) {
+            Log.e("Watchdog", e.getMessage());
+        }
+
     }
 }
