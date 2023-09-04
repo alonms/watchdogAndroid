@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <uses-sdk android:minSdkVersion="28" android:targetSdkVersion="32" />
+
+    <uses-sdk
+        android:minSdkVersion="28"
+        android:targetSdkVersion="32" />
 
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
-
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.SUBSCRIBE_TO_KEYGUARD_LOCKED_STATE" />
     <uses-permission android:name="android.permission.START_VIEW_APP_FEATURES" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
-    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions"/>
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -25,48 +27,44 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/Theme.Watchdog"
         tools:targetApi="31">
+        <service
+            android:name="com.sign.watchdog.RebootService"
+            android:enabled="true"
+            android:exported="true"></service>
+
         <receiver
-            android:name=".BootDeviceReceiver"
+            android:name="com.sign.watchdog.BootDeviceReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
-                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
-                <action android:name="android.intent.action.REBOOT"/>
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="android.intent.action.REBOOT" />
                 <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
-        <service
-            android:name="com.sign.watchdog.MainServiceAdz">
-        </service>
-
-        <service
-            android:name="com.sign.watchdog.MainServiceLatest">
-        </service>
-
+        <service android:name="com.sign.watchdog.MainServiceAdz"></service>
+        <service android:name="com.sign.watchdog.MainServiceLatest"></service>
 
         <activity
-            android:name=".UsageStatsActivity"
+            android:name="com.sign.watchdog.UsageStatsActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name=".DrawOverlaysActivity"
-            android:exported="true">
-        </activity>
-
+            android:name="com.sign.watchdog.DrawOverlaysActivity"
+            android:exported="true"></activity>
         <activity
-            android:name=".SettingsActivity"
-            android:exported="true">
-        </activity>
-
+            android:name="com.sign.watchdog.SettingsActivity"
+            android:exported="true"></activity>
     </application>
 
 </manifest>
