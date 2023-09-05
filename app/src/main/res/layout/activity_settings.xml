@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:text="signPlayer Watchdog"
             android:textSize="20sp"
-            android:height="80dp"
+            android:height="60dp"
             android:textStyle="bold"/>
         <TextView
             android:id="@+id/textView"
