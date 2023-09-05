@@ -23,13 +23,7 @@ public class RebootService extends Service {
     public void onCreate()
     {
         super.onCreate();
-        SharedPreferences userDetails = getSharedPreferences("userdetails", Context.MODE_PRIVATE);
-        boolean hardReboot = userDetails.getBoolean("hardReboot", true);
-        if (hardReboot) {
-            rebootDevice();
-        } else {
-            restartPlayer();
-        }
+        rebootDevice();
     }
 
     private void rebootDevice() {

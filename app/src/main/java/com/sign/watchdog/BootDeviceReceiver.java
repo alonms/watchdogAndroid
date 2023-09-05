@@ -47,7 +47,7 @@ public class BootDeviceReceiver extends BroadcastReceiver {
 
     private void createRestartIntent(Context context) {
         SharedPreferences userDetails = context.getSharedPreferences("userdetails", Context.MODE_PRIVATE);
-        boolean hardReboot = userDetails.getBoolean("hardReboot", true);
+        boolean hardReboot = userDetails.getBoolean("hardReboot", false);
         if (hardReboot) {
             Intent serviceIntent = new Intent(context, RebootService.class);
             restartPlayerIntent = (PendingIntent.getService(context, 0, serviceIntent, PendingIntent.FLAG_UPDATE_CURRENT));
