@@ -77,7 +77,7 @@ public class BootDeviceReceiver extends BroadcastReceiver {
             long rebootsPerDay = userDetails.getInt("rebootsPerDay", 1);
             if (rebootsPerDay>0) {
                 if (rebootsPerDay==4)
-                    rebootsPerDay = 24 * 12;
+                    rebootsPerDay = 24;
                 long intervalTime = AlarmManager.INTERVAL_DAY / rebootsPerDay;
                 long currentTime = System.currentTimeMillis();
                 Calendar calendar = Calendar.getInstance();
