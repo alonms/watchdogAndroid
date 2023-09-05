@@ -53,7 +53,7 @@ public class SettingsActivity extends AppCompatActivity  {
             }
         });
 
-        boolean hardReboot = userDetails.getBoolean("hardReboot", true);
+        boolean hardReboot = userDetails.getBoolean("hardReboot", false);
         CheckBox rebootCheckBox = findViewById(R.id.checkBox1);
         rebootCheckBox.setChecked(hardReboot);
         rebootCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
