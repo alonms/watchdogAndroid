@@ -31,7 +31,6 @@
             android:name="com.sign.watchdog.RebootService"
             android:enabled="true"
             android:exported="true"></service>
-
         <receiver
             android:name="com.sign.watchdog.BootDeviceReceiver"
             android:enabled="true"

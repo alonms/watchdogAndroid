@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -50,6 +52,20 @@ public class SettingsActivity extends AppCompatActivity  {
                 editor.commit();
             }
         });
+
+        boolean hardReboot = userDetails.getBoolean("hardReboot", true);
+        CheckBox rebootCheckBox = findViewById(R.id.checkBox1);
+        rebootCheckBox.setChecked(hardReboot);
+        rebootCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = userDetails.edit();
+                editor.putBoolean("hardReboot", isChecked);
+                editor.commit();
+            }
+        });
+
+
 
         Button btnReboot = findViewById(R.id.btnClose);
         btnReboot.setOnClickListener(new View.OnClickListener() {

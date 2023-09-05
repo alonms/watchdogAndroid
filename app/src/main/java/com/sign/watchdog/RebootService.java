@@ -1,7 +1,9 @@
 package com.sign.watchdog;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.IBinder;
 import android.util.Log;
@@ -21,16 +23,22 @@ public class RebootService extends Service {
     public void onCreate()
     {
         super.onCreate();
-        restartPlayer();
-        /*
+        SharedPreferences userDetails = getSharedPreferences("userdetails", Context.MODE_PRIVATE);
+        boolean hardReboot = userDetails.getBoolean("hardReboot", true);
+        if (hardReboot) {
+            rebootDevice();
+        } else {
+            restartPlayer();
+        }
+    }
+
+    private void rebootDevice() {
         try {
             Log.d("Watchdog", "Reboot device");
             Runtime.getRuntime().exec("reboot");
         } catch (Exception e) {
             restartPlayer();
         }
-
-         */
     }
 
     private void restartPlayer() {
