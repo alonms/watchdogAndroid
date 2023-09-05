@@ -50,7 +50,13 @@ public class BootDeviceReceiver extends BroadcastReceiver {
         boolean hardReboot = userDetails.getBoolean("hardReboot", false);
         if (hardReboot) {
             Intent serviceIntent = new Intent(context, RebootService.class);
-            restartPlayerIntent = (PendingIntent.getService(context, 0, serviceIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+            try {
+                restartPlayerIntent = (PendingIntent.getService(context, 0, serviceIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+                Log.d("Watchdog", "S21");
+            } catch (Exception e) {
+                restartPlayerIntent = (PendingIntent.getForegroundService(context, 0, serviceIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+                Log.d("Watchdog", "ADZ");
+            }
         } else {
             intent = new Intent();
             intent.setAction(Intent.ACTION_VIEW);
