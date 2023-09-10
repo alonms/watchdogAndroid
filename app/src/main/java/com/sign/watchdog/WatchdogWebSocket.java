@@ -24,6 +24,7 @@ public class WatchdogWebSocket extends WebSocketServer {
     private static final int MESSAGE_RESTART_PLAYER = 100;
     private static final int MESSAGE_TOAST = 101;
 
+
     Context mContext;
     WatchdogThread watchdogThread = null;
     Boolean watchdogEnabled = false;
@@ -90,6 +91,12 @@ public class WatchdogWebSocket extends WebSocketServer {
                 watchdogEnabled = false;
                 result = getResult(receivedMessage, "closed");
                 conn.send(result.toString());
+            } else if (command.equals("reboot")) {
+                Log.d("WebSocketServer", "reboot");
+                try {
+                    Runtime.getRuntime().exec("reboot");
+                } catch (Exception e) {
+                }
             }
         } catch (Exception e) {
 
@@ -132,6 +139,10 @@ public class WatchdogWebSocket extends WebSocketServer {
 
     }
 
+
+    private void reboot() {
+        Toast.makeText(mContext, "REBOOT", Toast.LENGTH_LONG).show();
+    }
 
     public Handler mMessageHandler = new Handler() {
         @Override
