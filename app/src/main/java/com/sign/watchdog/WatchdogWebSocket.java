@@ -20,7 +20,7 @@ import java.net.InetSocketAddress;
 import java.util.Map;
 
 
-// test
+// test2
 
 public class WatchdogWebSocket extends WebSocketServer {
     private static final int MESSAGE_RESTART_PLAYER = 100;
